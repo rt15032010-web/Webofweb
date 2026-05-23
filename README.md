@@ -35,4 +35,4 @@ Webofweb generates:
 - Free hosting support
 
 ## Creator
-Made by Tara Verma 🚀
+Made by Urga warriors🚀
