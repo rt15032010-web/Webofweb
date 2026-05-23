@@ -1,142 +1,263 @@
-import { useState } from "react";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WebCraft Studio</title>
 
-export default function WebCraftHome() { const [loginOpen, setLoginOpen] = useState(false); const [chatOpen, setChatOpen] = useState(false); const [messages, setMessages] = useState([ { role: "ai", text: "Hi! I am your AI assistant. Ask anything about building websites." } ]); const [input, setInput] = useState("");
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0b0f1a;
+      color: white;
+    }
 
-const sendMessage = () => { if (!input.trim()) return;
+    header {
+      display: flex;
+      justify-content: space-between;
+      padding: 15px;
+      background: #111827;
+      border-bottom: 1px solid #222;
+    }
 
-const userMsg = { role: "user", text: input };
-const aiMsg = {
-  role: "ai",
-  text: "This is a demo AI response. Connect backend AI API later."
-};
+    button {
+      cursor: pointer;
+    }
 
-setMessages([...messages, userMsg, aiMsg]);
-setInput("");
+    .btn {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 8px;
+      margin-left: 8px;
+    }
 
-};
+    .blue { background: #2563eb; color: white; }
+    .green { background: #16a34a; color: white; }
 
-return ( <div className="min-h-screen bg-gray-950 text-white"> {/* NAVBAR */} <header className="flex justify-between items-center p-4 border-b border-gray-800"> <h1 className="text-xl font-bold">WebCraft Studio</h1> <div className="space-x-4"> <button onClick={() => setLoginOpen(true)} className="px-4 py-2 bg-blue-600 rounded-xl">Login</button> <button onClick={() => setChatOpen(true)} className="px-4 py-2 bg-green-600 rounded-xl">AI Talk</button> </div> </header>
+    section {
+      padding: 40px;
+    }
 
-{/* HERO */}
-  <section className="p-10 text-center bg-gradient-to-b from-blue-900 to-gray-950">
-    <h2 className="text-4xl font-bold mb-4">We Build Websites for Everyone</h2>
-    <p className="max-w-2xl mx-auto text-gray-300">
-      Create portfolios, business sites, templates, and full professional websites with ease.
-      Even if you don't know coding, we help you build your online presence.
-    </p>
-  </section>
+    .hero {
+      text-align: center;
+      background: linear-gradient(#1e3a8a, #0b0f1a);
+    }
 
-  {/* ABOUT */}
-  <section className="p-10">
-    <h2 className="text-2xl font-bold mb-2">About Us</h2>
-    <p className="text-gray-300">
-      Our platform helps users create websites, portfolios, and business pages.
-      Developers can also use our templates to speed up their workflow.
-    </p>
-  </section>
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+    }
 
-  {/* SERVICES */}
-  <section className="p-10 grid md:grid-cols-3 gap-6">
-    {[
-      "Website Creation",
-      "Portfolio Builder",
-      "Custom Templates",
-      "Website Repair",
-      "UI/UX Design",
-      "Consultation"
-    ].map((s, i) => (
-      <div key={i} className="p-6 bg-gray-900 rounded-2xl">
-        <h3 className="font-bold mb-2">{s}</h3>
-        <p className="text-gray-400">Professional {s.toLowerCase()} service available.</p>
-      </div>
-    ))}
-  </section>
+    .card {
+      background: #111827;
+      padding: 15px;
+      border-radius: 12px;
+    }
 
-  {/* TEMPLATES */}
-  <section className="p-10">
-    <h2 className="text-2xl font-bold mb-4">Templates</h2>
-    <div className="grid md:grid-cols-3 gap-4">
-      {[1,2,3,4,5,6].map(i => (
-        <div key={i} className="h-40 bg-gray-800 rounded-xl flex items-center justify-center">
-          Template {i}
-        </div>
-      ))}
+    .template {
+      height: 120px;
+      background: #1f2937;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+      background: #1f2937;
+      border: none;
+      color: white;
+      border-radius: 8px;
+    }
+
+    /* MODAL */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: #111827;
+      padding: 20px;
+      border-radius: 10px;
+      width: 300px;
+    }
+
+    /* CHAT */
+    .chat-box {
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 280px;
+      background: #111827;
+      padding: 10px;
+      border-radius: 10px;
+    }
+
+    .messages {
+      height: 150px;
+      overflow-y: auto;
+      font-size: 14px;
+    }
+
+    .msg-user { color: #60a5fa; }
+    .msg-ai { color: #4ade80; }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      border-top: 1px solid #222;
+      color: gray;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h2>WebCraft Studio</h2>
+  <div>
+    <button class="btn blue" onclick="openLogin()">Login</button>
+    <button class="btn green" onclick="toggleChat()">AI Talk</button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <h1>We Build Websites for Everyone</h1>
+  <p>Create portfolios, business websites, templates, and more — even without coding knowledge.</p>
+</section>
+
+<!-- ABOUT -->
+<section>
+  <h2>About Us</h2>
+  <p>
+    We help users create websites, portfolios, and templates.
+    Developers can also use our platform to build faster.
+  </p>
+</section>
+
+<!-- SERVICES -->
+<section>
+  <h2>Services</h2>
+  <div class="grid">
+    <div class="card">Website Creation</div>
+    <div class="card">Portfolio Builder</div>
+    <div class="card">Templates</div>
+    <div class="card">Website Repair</div>
+    <div class="card">UI/UX Design</div>
+    <div class="card">Consulting</div>
+  </div>
+</section>
+
+<!-- TEMPLATES -->
+<section>
+  <h2>Templates</h2>
+  <div class="grid">
+    <div class="template">Template 1</div>
+    <div class="template">Template 2</div>
+    <div class="template">Template 3</div>
+    <div class="template">Template 4</div>
+    <div class="template">Template 5</div>
+    <div class="template">Template 6</div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section>
+  <h2>Portfolio Builder</h2>
+  <p>Write your skills, projects, and experience below:</p>
+  <textarea rows="6" placeholder="Example: HTML, CSS, JS, Projects..."></textarea>
+</section>
+
+<!-- PRICING -->
+<section>
+  <h2>Pricing</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>Basic Website</h3>
+      <p>Free (Limited)</p>
     </div>
-  </section>
-
-  {/* PORTFOLIO BUILDER */}
-  <section className="p-10 bg-gray-900">
-    <h2 className="text-2xl font-bold mb-4">Portfolio Builder</h2>
-    <p className="text-gray-300 mb-4">
-      Create your personal portfolio: skills, achievements, projects, and presentation of your work.
-    </p>
-    <textarea
-      className="w-full p-3 rounded-xl bg-gray-800"
-      rows="5"
-      placeholder="Write your skills, projects, and experience..."
-    />
-  </section>
-
-  {/* PRICING */}
-  <section className="p-10 grid md:grid-cols-3 gap-6">
-    {[
-      { name: "Basic Website", price: "Free (Limited)" },
-      { name: "Portfolio Setup", price: "Coming Soon" },
-      { name: "Full Business Website", price: "Custom Quote" }
-    ].map((p, i) => (
-      <div key={i} className="bg-gray-900 p-6 rounded-2xl">
-        <h3 className="font-bold">{p.name}</h3>
-        <p className="text-blue-400 mt-2">{p.price}</p>
-      </div>
-    ))}
-  </section>
-
-  {/* CONTACT */}
-  <section className="p-10">
-    <h2 className="text-2xl font-bold mb-2">Contact</h2>
-    <p className="text-gray-300">Email us only at: support@webcraftstudio.com</p>
-  </section>
-
-  {/* LOGIN MODAL */}
-  {loginOpen && (
-    <div className="fixed inset-0 bg-black/70 flex items-center justify-center">
-      <div className="bg-gray-900 p-6 rounded-xl w-80">
-        <h2 className="text-xl mb-4">Login</h2>
-        <input className="w-full p-2 mb-2 bg-gray-800 rounded" placeholder="Username" />
-        <input className="w-full p-2 mb-2 bg-gray-800 rounded" placeholder="Password" type="password" />
-        <button className="w-full bg-blue-600 p-2 rounded">Login</button>
-        <button onClick={() => setLoginOpen(false)} className="mt-2 text-sm text-gray-400">Close</button>
-      </div>
+    <div class="card">
+      <h3>Portfolio</h3>
+      <p>Coming Soon</p>
     </div>
-  )}
-
-  {/* AI CHAT */}
-  {chatOpen && (
-    <div className="fixed bottom-4 right-4 w-80 bg-gray-900 rounded-xl p-3">
-      <div className="h-60 overflow-y-auto text-sm space-y-2">
-        {messages.map((m, i) => (
-          <div key={i} className={m.role === "ai" ? "text-green-400" : "text-blue-400"}>
-            {m.text}
-          </div>
-        ))}
-      </div>
-      <div className="flex mt-2">
-        <input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          className="flex-1 p-1 bg-gray-800 rounded"
-          placeholder="Ask AI..."
-        />
-        <button onClick={sendMessage} className="ml-2 bg-green-600 px-2 rounded">Send</button>
-      </div>
-      <button onClick={() => setChatOpen(false)} className="text-xs mt-2 text-gray-400">Close</button>
+    <div class="card">
+      <h3>Business Website</h3>
+      <p>Custom Quote</p>
     </div>
-  )}
+  </div>
+</section>
 
-  {/* FOOTER */}
-  <footer className="p-6 text-center text-gray-500 border-t border-gray-800">
-    © 2026 WebCraft Studio. All rights reserved.
-  </footer>
+<!-- CONTACT -->
+<section>
+  <h2>Contact</h2>
+  <p>Email: support@webcraftstudio.com</p>
+</section>
+
+<!-- LOGIN MODAL -->
+<div class="modal" id="loginModal">
+  <div class="modal-content">
+    <h3>Login</h3>
+    <input placeholder="Username"/>
+    <input placeholder="Password" type="password"/>
+    <button class="btn blue" style="width:100%; margin-top:10px;">Login</button>
+    <button class="btn" style="width:100%; margin-top:10px;" onclick="closeLogin()">Close</button>
+  </div>
 </div>
 
-); }
+<!-- CHAT BOX -->
+<div class="chat-box" id="chatBox">
+  <div class="messages" id="messages">
+    <p class="msg-ai">AI: Hi! Ask me anything about websites.</p>
+  </div>
+  <input id="chatInput" placeholder="Type..." />
+  <button class="btn green" onclick="sendMsg()">Send</button>
+  <button class="btn" onclick="toggleChat()">Close</button>
+</div>
+
+<footer>
+  © 2026 WebCraft Studio
+</footer>
+
+<script>
+  function openLogin() {
+    document.getElementById("loginModal").style.display = "flex";
+  }
+
+  function closeLogin() {
+    document.getElementById("loginModal").style.display = "none";
+  }
+
+  function toggleChat() {
+    const chat = document.getElementById("chatBox");
+    chat.style.display = chat.style.display === "block" ? "none" : "block";
+  }
+
+  function sendMsg() {
+    const input = document.getElementById("chatInput");
+    const msgBox = document.getElementById("messages");
+
+    if (!input.value.trim()) return;
+
+    msgBox.innerHTML += `<p class="msg-user">You: ${input.value}</p>`;
+    msgBox.innerHTML += `<p class="msg-ai">AI: This is a demo response.</p>`;
+
+    input.value = "";
+    msgBox.scrollTop = msgBox.scrollHeight;
+  }
+</script>
+
+</body>
+</html>
