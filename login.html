@@ -1,114 +1,108 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Login</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body class="login-body">
-
-<div class="login-container">
-
-  <h1>Welcome Back</h1>
-
-  <p>Login to continue</p>
-
-  <input type="email" id="email" placeholder="Enter Email">
-
-  <input type="password" id="password" placeholder="Enter Password">
-
-  <button onclick="signup()">Create Account</button>
-
-  <button onclick="login()">Login</button>
-
-  <button onclick="googleLogin()" class="google-btn">
-    Continue with Google
-  </button>
-
-</div>
-
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
 
 import {
-  getAuth,
-  GoogleAuthProvider,
-  signInWithRedirect,
-  getRedirectResult,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword
-}
-from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+getAuth,
+GoogleAuthProvider,
+signInWithPopup,
+createUserWithEmailAndPassword,
+signInWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBBg5ULPiuynvTnFtVJSYIq2THUJU1-ODo",
-  authDomain: "web-of-webs-5dcc6.firebaseapp.com",
-  projectId: "web-of-webs-5dcc6",
-  storageBucket: "web-of-webs-5dcc6.firebasestorage.app",
-  messagingSenderId: "716021090393",
-  appId: "1:716021090393:web:6ccf781be1d36d49408948",
-  measurementId: "G-WNJK1QDBV8"
+
+apiKey: "AIzaSyBBg5ULPiuynvTnFtVJSYIq2THUJU1-ODo",
+
+authDomain: "web-of-webs-5dcc6.firebaseapp.com",
+
+projectId: "web-of-webs-5dcc6",
+
+storageBucket: "web-of-webs-5dcc6.firebasestorage.app",
+
+messagingSenderId: "716021090393",
+
+appId: "1:716021090393:web:6ccf781be1d36d49408948",
+
+measurementId: "G-WNJK1QDBV8"
+
 };
 
 const app = initializeApp(firebaseConfig);
+
 const auth = getAuth(app);
+
 const provider = new GoogleAuthProvider();
 
-getRedirectResult(auth)
-.then((result) => {
-  if(result && result.user){
-    localStorage.setItem("username", result.user.displayName);
-    window.location.href = "dashboard.html";
-  }
-});
+window.googleLogin = async function(){
 
-window.googleLogin = function(){
-  signInWithRedirect(auth, provider);
+try{
+
+const result = await signInWithPopup(auth, provider);
+
+localStorage.setItem(
+"wowUser",
+result.user.displayName
+);
+
+window.location.href = "dashboard.html";
+
+}catch(error){
+
+alert(error.message);
+
 }
 
-window.signup = function(){
-
-  createUserWithEmailAndPassword(
-    auth,
-    email.value,
-    password.value
-  )
-  .then(() => {
-
-    localStorage.setItem(
-      "username",
-      email.value
-    );
-
-    window.location.href = "dashboard.html";
-  })
-  .catch((error)=>{
-    alert(error.message);
-  });
 }
 
-window.login = function(){
+window.signup = async function(){
 
-  signInWithEmailAndPassword(
-    auth,
-    email.value,
-    password.value
-  )
-  .then(()=>{
+try{
 
-    localStorage.setItem(
-      "username",
-      email.value
-    );
+await createUserWithEmailAndPassword(
+auth,
+email.value,
+password.value
+);
 
-    window.location.href = "dashboard.html";
-  })
-  .catch((error)=>{
-    alert(error.message);
-  });
+localStorage.setItem(
+"wowUser",
+email.value
+);
+
+window.location.href = "dashboard.html";
+
+}catch(error){
+
+alert(error.message);
+
+}
+
+}
+
+window.login = async function(){
+
+try{
+
+await signInWithEmailAndPassword(
+auth,
+email.value,
+password.value
+);
+
+localStorage.setItem(
+"wowUser",
+email.value
+);
+
+window.location.href = "dashboard.html";
+
+}catch(error){
+
+alert(error.message);
+
+}
+
 }
 
 </script>
-
-</body>
-</html>
