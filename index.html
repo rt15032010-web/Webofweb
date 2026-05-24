@@ -1,32 +1,63 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>WebCraft Studio</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Web of Webs</title>
 
   <style>
+    body {
+      margin: 0;
+      font-family: Arial;
+      background: white;
+      color: #111;
+    }
+
+    /* NAVBAR */
+    nav {
+      background: #ffffff;
+      padding: 15px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      border-bottom: 1px solid #ddd;
+      position: sticky;
+      top: 0;
+    }
+
+    nav a {
+      color: #111;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      color: #2563eb;
+    }
+
+    /* HERO */
     .hero {
       text-align: center;
-      padding: 80px 20px;
-      background: linear-gradient(135deg, #1e3a8a, #0b0f1a);
+      padding: 70px 20px;
+      background: #f3f4f6;
     }
 
     .hero h1 {
       font-size: 45px;
+      color: #111;
     }
 
     .btn {
-      padding: 10px 20px;
-      margin: 10px;
-      border-radius: 10px;
+      padding: 10px 18px;
+      border-radius: 8px;
       border: none;
+      margin: 10px;
       cursor: pointer;
       font-weight: bold;
     }
 
     .blue { background: #2563eb; color: white; }
-    .green { background: #16a34a; color: white; }
+    .black { background: #111; color: white; }
 
+    /* GRID */
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -35,35 +66,26 @@
     }
 
     .card {
-      background: rgba(255,255,255,0.05);
-      padding: 15px;
-      border-radius: 15px;
-      backdrop-filter: blur(10px);
+      border: 1px solid #eee;
+      border-radius: 12px;
+      overflow: hidden;
       transition: 0.3s;
+      background: white;
     }
 
     .card:hover {
-      transform: scale(1.05);
+      transform: scale(1.03);
     }
 
     img {
       width: 100%;
-      border-radius: 12px;
+      height: 180px;
+      object-fit: cover;
     }
 
-    nav {
-      background: #111827;
-      padding: 15px;
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      position: sticky;
-      top: 0;
-    }
-
-    nav a {
-      color: white;
-      text-decoration: none;
+    h2 {
+      text-align: center;
+      margin-top: 40px;
     }
   </style>
 </head>
@@ -76,32 +98,30 @@
   <a href="portfolio.html">Portfolio</a>
   <a href="templates.html">Templates</a>
   <a href="pricing.html">Pricing</a>
-  <a href="ai.html">AI</a>
+  <a href="ai.html">AI Assistant</a>
 </nav>
 
 <div class="hero">
-  <h1>🚀 WebCraft Studio</h1>
-  <p>Build Websites • Portfolios • Templates • AI Help</p>
+  <h1>🌐 Web of Webs</h1>
+  <p>Build Websites • Portfolios • Templates • AI Tools</p>
 
   <button class="btn blue">Create Website</button>
-  <button class="btn green">View Templates</button>
+  <button class="btn black">View Templates</button>
 </div>
 
-<section>
-  <h2 style="text-align:center;">🔥 AI Design Gallery</h2>
+<h2>🔥 Website Design Gallery</h2>
 
-  <div class="grid">
-    <script>
-      for (let i = 1; i <= 30; i++) {
-        document.write(`
-          <div class="card">
-            <img src="https://source.unsplash.com/400x300/?website,ui,design&sig=${i}">
-          </div>
-        `);
-      }
-    </script>
-  </div>
-</section>
+<div class="grid">
+  <script>
+    for (let i = 1; i <= 30; i++) {
+      document.write(`
+        <div class="card">
+          <img src="https://picsum.photos/400/300?random=${i}">
+        </div>
+      `);
+    }
+  </script>
+</div>
 
 </body>
 </html>
