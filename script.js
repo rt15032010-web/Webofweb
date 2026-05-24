@@ -20,7 +20,7 @@ if(slides.length > 0){
 
 
 
-// DASHBOARD USER
+// USERNAME
 
 const welcome = document.getElementById("welcome");
 
