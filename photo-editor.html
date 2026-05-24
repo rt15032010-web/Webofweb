@@ -1,24 +1,64 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Photo Editor</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advanced Photo Editor</title>
+<link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="tool-body">
 
-<div class="portfolio-container">
+<div class="tool-navbar">
+  <h1>🎨 AI Photo Editor</h1>
+  <a href="dashboard.html">← Dashboard</a>
+</div>
 
-  <h1>Photo Editor</h1>
+<div class="editor-layout">
 
-  <input type="file">
+<div class="editor-sidebar">
 
-  <button>Crop</button>
+<h2>Editing Tools</h2>
 
-  <button>Rotate</button>
+<button>✂ Crop</button>
+<button>🔄 Rotate</button>
+<button>🌈 Filters</button>
+<button>☀ Brightness</button>
+<button>🎨 Contrast</button>
+<button>🌙 Shadows</button>
+<button>✨ Highlights</button>
+<button>🧼 Smooth Skin</button>
+<button>🪄 AI Enhance</button>
+<button>📸 Blur Background</button>
+<button>🖼 Add Frame</button>
+<button>📝 Add Text</button>
+<button>😊 Stickers</button>
+<button>💡 Light FX</button>
+<button>🌌 Neon Effect</button>
+<button>🧊 Glass Effect</button>
+<button>🔥 Fire Effect</button>
+<button>🌧 Rain Effect</button>
+<button>🎞 Vintage</button>
+<button>🖌 Draw</button>
+<button>🧽 Remove Object</button>
+<button>📐 Resize</button>
+<button>🪞 Flip</button>
+<button>💾 Download HD</button>
 
-  <button>Brightness</button>
+</div>
 
-  <button>Download</button>
+<div class="editor-main">
+
+<label class="upload-box">
+<input type="file" hidden>
+<h2>Upload Your Photo</h2>
+<p>Drag & Drop or Select Image</p>
+</label>
+
+<div class="preview-box">
+<img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1200" alt="preview">
+</div>
+
+</div>
 
 </div>
 
