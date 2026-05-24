@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>Web of Webs</title>
 
   <style>
     body {
       margin: 0;
-      font-family: Arial;
-      background: white;
+      font-family: Arial, sans-serif;
+      background: #ffffff;
       color: #111;
     }
 
@@ -24,8 +25,8 @@
     }
 
     nav a {
-      color: #111;
       text-decoration: none;
+      color: #111;
       font-weight: bold;
     }
 
@@ -42,20 +43,38 @@
 
     .hero h1 {
       font-size: 45px;
-      color: #111;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: #444;
     }
 
     .btn {
       padding: 10px 18px;
-      border-radius: 8px;
-      border: none;
       margin: 10px;
+      border: none;
+      border-radius: 8px;
       cursor: pointer;
       font-weight: bold;
     }
 
     .blue { background: #2563eb; color: white; }
     .black { background: #111; color: white; }
+
+    /* ABOUT */
+    .about {
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .about p {
+      max-width: 750px;
+      margin: auto;
+      color: #444;
+      line-height: 1.6;
+    }
 
     /* GRID */
     .grid {
@@ -69,8 +88,8 @@
       border: 1px solid #eee;
       border-radius: 12px;
       overflow: hidden;
+      background: #fff;
       transition: 0.3s;
-      background: white;
     }
 
     .card:hover {
@@ -83,6 +102,14 @@
       object-fit: cover;
     }
 
+    .card p {
+      text-align: center;
+      padding: 10px;
+      margin: 0;
+      font-weight: bold;
+      color: #333;
+    }
+
     h2 {
       text-align: center;
       margin-top: 40px;
@@ -92,6 +119,7 @@
 
 <body>
 
+<!-- NAVBAR -->
 <nav>
   <a href="index.html">Home</a>
   <a href="builder.html">Builder</a>
@@ -101,26 +129,43 @@
   <a href="ai.html">AI Assistant</a>
 </nav>
 
+<!-- HERO -->
 <div class="hero">
   <h1>🌐 Web of Webs</h1>
-  <p>Build Websites • Portfolios • Templates • AI Tools</p>
+  <p>Build Websites • Portfolios • Templates • AI Assistant</p>
 
-  <button class="btn blue">Create Website</button>
-  <button class="btn black">View Templates</button>
+  <button class="btn blue">🚀 Create Website</button>
+  <button class="btn black">🎨 Explore Templates</button>
 </div>
 
-<h2>🔥 Website Design Gallery</h2>
+<!-- ABOUT SECTION -->
+<div class="about">
+  <h2>About Web of Webs</h2>
+  <p>
+    Web of Webs is a platform where anyone can create their own website easily.
+    You can build portfolios, use ready-made templates, and get AI help for coding and design.
+    This platform is made for beginners as well as developers to create professional websites without difficulty.
+  </p>
+</div>
+
+<!-- TEMPLATE IMAGE SECTION (CLICKABLE) -->
+<h2>🔥 Website Templates</h2>
 
 <div class="grid">
+
   <script>
-    for (let i = 1; i <= 30; i++) {
+    for (let i = 1; i <= 12; i++) {
       document.write(`
-        <div class="card">
-          <img src="https://picsum.photos/400/300?random=${i}">
-        </div>
+        <a href="templates.html" style="text-decoration:none; color:inherit;">
+          <div class="card">
+            <img src="https://picsum.photos/400/300?random=${i}">
+            <p>Use Template ${i}</p>
+          </div>
+        </a>
       `);
     }
   </script>
+
 </div>
 
 </body>
