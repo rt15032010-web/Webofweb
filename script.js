@@ -1,35 +1,35 @@
 const slides = document.querySelectorAll(".slide");
 
-let current = 0;
+let currentSlide = 0;
 
 if(slides.length > 0){
 
-  setInterval(() => {
+setInterval(() => {
 
-    slides[current].classList.remove("active");
+slides[currentSlide].classList.remove("active");
 
-    current = (current + 1) % slides.length;
+currentSlide = (currentSlide + 1) % slides.length;
 
-    slides[current].classList.add("active");
+slides[currentSlide].classList.add("active");
 
-  },3000);
+},3000);
 
 }
+
+const userName = localStorage.getItem("wowUser");
 
 const welcome = document.getElementById("welcome");
 
 if(welcome){
 
-  const username = localStorage.getItem("username");
-
-  welcome.innerHTML = `Hello, ${username} 👋`;
+welcome.innerHTML = `Hello, ${userName || "Creator"} 👋`;
 
 }
 
 function logout(){
 
-  localStorage.clear();
+localStorage.removeItem("wowUser");
 
-  window.location.href = "login.html";
+window.location.href = "login.html";
 
 }
