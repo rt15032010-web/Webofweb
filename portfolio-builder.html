@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Web of Webs - Portfolio Builder</title>
+  <title>Advanced Portfolio Builder - Web of Webs</title>
 
   <style>
     body {
@@ -11,32 +11,54 @@
       color: white;
     }
 
-    .top {
+    /* NAV */
+    nav {
       background: #111827;
       padding: 15px;
-      text-align: center;
-      font-size: 20px;
-      font-weight: bold;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
     }
 
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 8px 12px;
+      border-radius: 6px;
+    }
+
+    nav a:hover {
+      background: #2563eb;
+    }
+
+    /* LAYOUT */
     .container {
       display: flex;
       height: 90vh;
     }
 
     .left {
-      width: 40%;
+      width: 45%;
       background: #111827;
       padding: 20px;
       overflow-y: auto;
     }
 
-    input, textarea {
+    .right {
+      width: 55%;
+      background: white;
+      color: black;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    input, textarea, select {
       width: 100%;
-      margin: 8px 0;
       padding: 10px;
-      border: none;
+      margin: 6px 0;
       border-radius: 8px;
+      border: none;
       outline: none;
     }
 
@@ -44,11 +66,11 @@
       width: 100%;
       padding: 12px;
       margin-top: 10px;
-      background: #3b82f6;
       border: none;
+      border-radius: 8px;
+      background: #3b82f6;
       color: white;
       font-weight: bold;
-      border-radius: 8px;
       cursor: pointer;
     }
 
@@ -56,125 +78,154 @@
       background: #2563eb;
     }
 
-    .right {
-      width: 60%;
-      background: white;
-      color: black;
-      padding: 30px;
-      overflow-y: auto;
-    }
-
     .card {
       background: #f3f4f6;
-      padding: 20px;
-      border-radius: 12px;
-      margin-top: 10px;
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 10px;
     }
 
     .title {
-      font-size: 28px;
+      font-size: 24px;
       font-weight: bold;
-    }
-
-    .small {
-      color: gray;
     }
   </style>
 </head>
 
 <body>
 
-<div class="top">🚀 Web of Webs - Portfolio Builder</div>
+<!-- NAVBAR -->
+<nav>
+  <a href="index.html">Home</a>
+  <a href="portfolio.html">Portfolio</a>
+  <a href="portfolio-builder.html">Builder</a>
+</nav>
 
 <div class="container">
 
-  <!-- LEFT PANEL -->
+  <!-- LEFT INPUT -->
   <div class="left">
 
-    <h3>👤 Personal Info</h3>
+    <h2>👤 Personal Info</h2>
 
-    <input id="name" placeholder="Your Name">
-    <input id="title" placeholder="Your Title">
-    <textarea id="bio" placeholder="About You"></textarea>
+    <input id="name" placeholder="Full Name">
+    <input id="dob" placeholder="Date of Birth">
+    <input id="age" placeholder="Age">
+    <input id="country" placeholder="Country">
+    <input id="state" placeholder="State">
+    <input id="city" placeholder="City / Village">
+    <input id="phone" placeholder="Phone Number">
 
-    <h3>💡 Skills</h3>
-    <input id="skills" placeholder="HTML, CSS, JavaScript">
+    <h2>🎓 School Info</h2>
 
-    <h3>📁 Project</h3>
+    <input id="schoolCount" type="number" min="1" max="12" placeholder="How many schools? (1-12)" onchange="generateSchools()">
+
+    <div id="schoolsBox"></div>
+
+    <h2>🏫 College</h2>
+
+    <select id="collegeYes" onchange="toggleCollege()">
+      <option value="no">No College</option>
+      <option value="yes">Yes College</option>
+    </select>
+
+    <div id="collegeBox"></div>
+
+    <h2>💡 Skills</h2>
+    <input id="skills" placeholder="HTML, CSS, JS">
+
+    <h2>📁 Project</h2>
     <input id="projectName" placeholder="Project Name">
     <input id="projectDesc" placeholder="Project Description">
 
     <button onclick="generate()">✨ Generate Portfolio</button>
-    <button onclick="downloadPortfolio()">💾 Download Portfolio</button>
 
   </div>
 
   <!-- RIGHT PREVIEW -->
   <div class="right" id="preview">
-
     <h2>Live Preview</h2>
-    <p class="small">Fill the form and click Generate</p>
-
+    <p>Fill form and click Generate</p>
   </div>
 
 </div>
 
 <script>
 
-let portfolioHTML = "";
+function generateSchools() {
+  let count = document.getElementById("schoolCount").value;
+  let box = document.getElementById("schoolsBox");
+  box.innerHTML = "";
 
-function generate(){
-
-  let name = document.getElementById("name").value;
-  let title = document.getElementById("title").value;
-  let bio = document.getElementById("bio").value;
-  let skills = document.getElementById("skills").value;
-  let projectName = document.getElementById("projectName").value;
-  let projectDesc = document.getElementById("projectDesc").value;
-
-  portfolioHTML = `
-    <div style="font-family:Arial">
-
-      <div style="background:#fff;padding:20px;border-radius:12px;margin-bottom:10px">
-        <h1>${name}</h1>
-        <h3>${title}</h3>
-      </div>
-
-      <div style="background:#fff;padding:20px;border-radius:12px;margin-bottom:10px">
-        <h2>About Me</h2>
-        <p>${bio}</p>
-      </div>
-
-      <div style="background:#fff;padding:20px;border-radius:12px;margin-bottom:10px">
-        <h2>Skills</h2>
-        <p>${skills}</p>
-      </div>
-
-      <div style="background:#fff;padding:20px;border-radius:12px;margin-bottom:10px">
-        <h2>Project</h2>
-        <h3>${projectName}</h3>
-        <p>${projectDesc}</p>
-      </div>
-
-    </div>
-  `;
-
-  document.getElementById("preview").innerHTML = portfolioHTML;
+  for (let i = 1; i <= count; i++) {
+    box.innerHTML += `
+      <input placeholder="School ${i} Name" id="school${i}">
+      <input placeholder="School ${i} Location" id="schoolloc${i}">
+    `;
+  }
 }
 
-function downloadPortfolio(){
+function toggleCollege() {
+  let val = document.getElementById("collegeYes").value;
+  let box = document.getElementById("collegeBox");
 
-  if(portfolioHTML === ""){
-    alert("Please generate portfolio first!");
-    return;
+  if (val === "yes") {
+    box.innerHTML = `
+      <input id="collegeName" placeholder="College Name">
+      <input id="collegePlace" placeholder="College Location">
+      <input id="course" placeholder="Course">
+    `;
+  } else {
+    box.innerHTML = "";
+  }
+}
+
+function generate() {
+
+  let html = "";
+
+  html += `<div class="card"><div class="title">${document.getElementById("name").value}</div></div>`;
+
+  html += `<div class="card">
+    <b>DOB:</b> ${document.getElementById("dob").value}<br>
+    <b>Age:</b> ${document.getElementById("age").value}<br>
+    <b>Location:</b> ${document.getElementById("city").value}, ${document.getElementById("state").value}, ${document.getElementById("country").value}<br>
+    <b>Phone:</b> ${document.getElementById("phone").value}
+  </div>`;
+
+  // Schools
+  let count = document.getElementById("schoolCount").value;
+  let schoolHTML = "";
+
+  for (let i = 1; i <= count; i++) {
+    schoolHTML += `
+      <p>🏫 ${document.getElementById("school"+i).value} - ${document.getElementById("schoolloc"+i).value}</p>
+    `;
   }
 
-  let blob = new Blob([portfolioHTML], {type: "text/html"});
-  let link = document.createElement("a");
+  html += `<div class="card"><h3>Schools</h3>${schoolHTML}</div>`;
 
-  link.href = URL.createObjectURL(blob);
-  link.download = "portfolio.html";
-  link.click();
+  // College
+  if (document.getElementById("collegeYes").value === "yes") {
+    html += `<div class="card">
+      <h3>College</h3>
+      ${document.getElementById("collegeName").value} <br>
+      ${document.getElementById("collegePlace").value} <br>
+      ${document.getElementById("course").value}
+    </div>`;
+  }
+
+  // Skills
+  html += `<div class="card"><h3>Skills</h3>${document.getElementById("skills").value}</div>`;
+
+  // Project
+  html += `<div class="card">
+    <h3>Project</h3>
+    <b>${document.getElementById("projectName").value}</b><br>
+    ${document.getElementById("projectDesc").value}
+  </div>`;
+
+  document.getElementById("preview").innerHTML = html;
 }
 
 </script>
