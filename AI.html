@@ -1,9 +1,41 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>AI Assistant</title>
-  <link rel="stylesheet" href="style.css">
+  <title>AI Assistant - Web of Webs</title>
+
+  <style>
+    body { font-family: Arial; background:#f5f5f5; margin:0; }
+    nav {
+      background:white; padding:15px; display:flex;
+      justify-content:center; gap:20px; border-bottom:1px solid #ddd;
+    }
+    nav a { text-decoration:none; color:#111; font-weight:bold; }
+
+    .box {
+      max-width:700px; margin:auto; padding:20px;
+    }
+
+    input {
+      width:100%; padding:12px; border-radius:8px;
+      border:1px solid #ccc;
+    }
+
+    button {
+      width:100%; padding:12px; margin-top:10px;
+      background:#2563eb; color:white; border:none;
+      border-radius:8px; cursor:pointer;
+    }
+
+    .chat {
+      margin-top:20px; background:white; padding:15px;
+      border-radius:10px; min-height:200px;
+    }
+
+    .ai { color:green; }
+    .user { color:blue; }
+  </style>
 </head>
+
 <body>
 
 <nav>
@@ -12,17 +44,69 @@
   <a href="portfolio.html">Portfolio</a>
   <a href="templates.html">Templates</a>
   <a href="pricing.html">Pricing</a>
-  <a href="ai.html">AI Assistant</a>
+  <a href="ai.html">AI</a>
 </nav>
 
-<section>
-  <h1>AI Assistant</h1>
+<div class="box">
 
-  <input placeholder="Ask anything about websites...">
-  <button>Send</button>
+<h1>🤖 Web of Webs AI (Smart Engine)</h1>
 
-  <p>AI: I can help you build websites, portfolios, and templates.</p>
-</section>
+<input id="q" placeholder="Ask anything...">
+<button onclick="askAI()">Ask</button>
+
+<div class="chat" id="chat">
+  <p class="ai">AI: Hello! Ask me anything about coding or Web of Webs.</p>
+</div>
+
+</div>
+
+<script>
+/* ================================
+   🧠 KNOWLEDGE BASE (EXPANDABLE)
+================================ */
+const knowledge = [
+  {k:"html", a:"HTML is used to structure web pages using elements like headings, paragraphs, images, and buttons."},
+  {k:"css", a:"CSS is used to design websites including colors, layout, animations, and responsiveness."},
+  {k:"javascript", a:"JavaScript makes websites interactive like buttons, forms, games, and apps."},
+  {k:"python", a:"Python is a powerful language used in AI, data science, automation, and web development."},
+  {k:"website", a:"A website is a collection of web pages made using HTML, CSS, and JavaScript."},
+  {k:"ai", a:"AI (Artificial Intelligence) allows machines to simulate human thinking and decision-making."},
+  {k:"web of webs", a:"Web of Webs is your platform to build websites, portfolios, templates, and AI-assisted tools."},
+  {k:"react", a:"React is a JavaScript library used to build fast and modern web applications."},
+  {k:"node", a:"Node.js is used to run JavaScript on the server side."},
+  {k:"database", a:"Databases store user data like accounts, portfolios, and website content."}
+];
+
+/* ================================
+   🤖 SMART SEARCH ENGINE
+================================ */
+function getAnswer(q){
+  q = q.toLowerCase();
+
+  for(let i=0;i<knowledge.length;i++){
+    if(q.includes(knowledge[i].k)){
+      return knowledge[i].a;
+    }
+  }
+
+  return "I don't know this yet, but Web of Webs AI is learning. Try asking about HTML, CSS, Python, JavaScript, or website building.";
+}
+
+/* ================================
+   💬 CHAT FUNCTION
+================================ */
+function askAI(){
+  let q = document.getElementById("q").value;
+  let chat = document.getElementById("chat");
+
+  let ans = getAnswer(q);
+
+  chat.innerHTML += "<p class='user'>You: "+q+"</p>";
+  chat.innerHTML += "<p class='ai'>AI: "+ans+"</p>";
+
+  document.getElementById("q").value = "";
+}
+</script>
 
 </body>
 </html>
