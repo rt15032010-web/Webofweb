@@ -1,13 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-
   <title>Login</title>
-
   <link rel="stylesheet" href="style.css">
-
 </head>
-
 <body class="login-body">
 
 <div class="login-container">
@@ -37,11 +33,11 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/fireba
 import {
   getAuth,
   GoogleAuthProvider,
-  signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword
 }
-
 from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -55,42 +51,28 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-
 const auth = getAuth(app);
-
 const provider = new GoogleAuthProvider();
 
-window.googleLogin = function () {
-
-  signInWithPopup(auth, provider)
-
-  .then((result) => {
-
-    localStorage.setItem(
-      "username",
-      result.user.displayName
-    );
-
+getRedirectResult(auth)
+.then((result) => {
+  if(result && result.user){
+    localStorage.setItem("username", result.user.displayName);
     window.location.href = "dashboard.html";
+  }
+});
 
-  })
+window.googleLogin = function(){
+  signInWithRedirect(auth, provider);
+}
 
-  .catch((error) => {
-
-    alert(error.message);
-
-  });
-
-};
-
-window.signup = function () {
+window.signup = function(){
 
   createUserWithEmailAndPassword(
     auth,
     email.value,
     password.value
   )
-
   .then(() => {
 
     localStorage.setItem(
@@ -99,26 +81,20 @@ window.signup = function () {
     );
 
     window.location.href = "dashboard.html";
-
   })
-
-  .catch((error) => {
-
+  .catch((error)=>{
     alert(error.message);
-
   });
+}
 
-};
-
-window.login = function () {
+window.login = function(){
 
   signInWithEmailAndPassword(
     auth,
     email.value,
     password.value
   )
-
-  .then(() => {
+  .then(()=>{
 
     localStorage.setItem(
       "username",
@@ -126,16 +102,11 @@ window.login = function () {
     );
 
     window.location.href = "dashboard.html";
-
   })
-
-  .catch((error) => {
-
+  .catch((error)=>{
     alert(error.message);
-
   });
-
-};
+}
 
 </script>
 
