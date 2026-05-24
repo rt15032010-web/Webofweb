@@ -1,94 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Presentation Tool</title>
-
-  <style>
-    body {
-      font-family: Arial;
-      background: #f5f5f5;
-      margin: 0;
-      text-align: center;
-    }
-
-    nav {
-      background: white;
-      padding: 10px;
-      border-bottom: 1px solid #ddd;
-    }
-
-    textarea {
-      width: 80%;
-      height: 200px;
-      margin-top: 20px;
-    }
-
-    button {
-      padding: 10px;
-      margin: 10px;
-      background: blue;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-
-    .box {
-      background: white;
-      margin: 20px auto;
-      width: 80%;
-      padding: 20px;
-      border-radius: 10px;
-    }
-  </style>
+  <title>Presentation Maker</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<nav>
-  <a href="portfolio.html">⬅ Back</a>
-</nav>
+<div class="portfolio-container">
 
-<h2>📊 Presentation Maker</h2>
+  <h1>Presentation Maker</h1>
 
-<div class="box">
+  <input type="text" placeholder="Presentation Title">
 
-  <textarea id="text">Write your slide here...</textarea>
+  <textarea placeholder="Slide Content"></textarea>
 
-  <br>
+  <button>Add Slide</button>
 
-  <button onclick="addSlide()">➕ Add Slide</button>
-  <button onclick="showSlide()">👁 Preview</button>
-  <button onclick="download()">💾 Download</button>
-
-  <h3>Preview:</h3>
-  <div id="preview"></div>
+  <button>Download Presentation</button>
 
 </div>
-
-<script>
-
-let slides = [];
-
-function addSlide(){
-  slides.push(document.getElementById("text").value);
-  alert("Slide added!");
-}
-
-function showSlide(){
-  document.getElementById("preview").innerText =
-    document.getElementById("text").value;
-}
-
-function download(){
-  let blob = new Blob([slides.join("\n---\n")], {type:"text/plain"});
-  let link = document.createElement("a");
-
-  link.href = URL.createObjectURL(blob);
-  link.download = "presentation.txt";
-  link.click();
-}
-
-</script>
 
 </body>
 </html>
