@@ -2,17 +2,19 @@
 <html>
 <head>
 
-  <title>Login - Web of Webs</title>
+  <title>Login</title>
 
   <link rel="stylesheet" href="style.css">
 
 </head>
 
-<body class="login-page">
+<body class="login-body">
 
-<div class="login-box">
+<div class="login-container">
 
-  <h1>Welcome To Web of Webs</h1>
+  <h1>Welcome Back</h1>
+
+  <p>Login to continue</p>
 
   <input type="email" id="email" placeholder="Enter Email">
 
@@ -64,7 +66,10 @@ window.googleLogin = function () {
 
   .then((result) => {
 
-    localStorage.setItem("username", result.user.displayName);
+    localStorage.setItem(
+      "username",
+      result.user.displayName
+    );
 
     window.location.href = "dashboard.html";
 
@@ -88,7 +93,10 @@ window.signup = function () {
 
   .then(() => {
 
-    localStorage.setItem("username", email.value);
+    localStorage.setItem(
+      "username",
+      email.value
+    );
 
     window.location.href = "dashboard.html";
 
@@ -112,7 +120,10 @@ window.login = function () {
 
   .then(() => {
 
-    localStorage.setItem("username", email.value);
+    localStorage.setItem(
+      "username",
+      email.value
+    );
 
     window.location.href = "dashboard.html";
 
