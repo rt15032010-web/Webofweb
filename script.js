@@ -1,5 +1,3 @@
-// IMAGE SLIDER
-
 const slides = document.querySelectorAll(".slide");
 
 let current = 0;
@@ -18,10 +16,6 @@ if(slides.length > 0){
 
 }
 
-
-
-// USERNAME
-
 const welcome = document.getElementById("welcome");
 
 if(welcome){
@@ -31,10 +25,6 @@ if(welcome){
   welcome.innerHTML = `Hello, ${username} 👋`;
 
 }
-
-
-
-// LOGOUT
 
 function logout(){
 
