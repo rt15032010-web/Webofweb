@@ -89,12 +89,20 @@
       font-size: 24px;
       font-weight: bold;
     }
+
+    img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 10px;
+    }
   </style>
 </head>
 
 <body>
 
-<!-- NAVBAR -->
+<!-- NAVIGATION -->
 <nav>
   <a href="index.html">Home</a>
   <a href="portfolio.html">Portfolio</a>
@@ -103,8 +111,11 @@
 
 <div class="container">
 
-  <!-- LEFT INPUT -->
+  <!-- LEFT SIDE -->
   <div class="left">
+
+    <h2>🖼 Profile Image</h2>
+    <input type="file" id="imageInput" accept="image/*">
 
     <h2>👤 Personal Info</h2>
 
@@ -116,9 +127,9 @@
     <input id="city" placeholder="City / Village">
     <input id="phone" placeholder="Phone Number">
 
-    <h2>🎓 School Info</h2>
+    <h2>🎓 School Info (1–12)</h2>
 
-    <input id="schoolCount" type="number" min="1" max="12" placeholder="How many schools? (1-12)" onchange="generateSchools()">
+    <input id="schoolCount" type="number" min="1" max="12" placeholder="How many schools?" onchange="generateSchools()">
 
     <div id="schoolsBox"></div>
 
@@ -142,7 +153,7 @@
 
   </div>
 
-  <!-- RIGHT PREVIEW -->
+  <!-- RIGHT SIDE -->
   <div class="right" id="preview">
     <h2>Live Preview</h2>
     <p>Fill form and click Generate</p>
@@ -152,6 +163,20 @@
 
 <script>
 
+let profileImage = "";
+
+/* IMAGE UPLOAD */
+document.getElementById("imageInput").onchange = function(event) {
+  let reader = new FileReader();
+
+  reader.onload = function() {
+    profileImage = reader.result;
+  };
+
+  reader.readAsDataURL(event.target.files[0]);
+};
+
+/* SCHOOL BOXES */
 function generateSchools() {
   let count = document.getElementById("schoolCount").value;
   let box = document.getElementById("schoolsBox");
@@ -165,6 +190,7 @@ function generateSchools() {
   }
 }
 
+/* COLLEGE */
 function toggleCollege() {
   let val = document.getElementById("collegeYes").value;
   let box = document.getElementById("collegeBox");
@@ -180,20 +206,30 @@ function toggleCollege() {
   }
 }
 
+/* GENERATE PORTFOLIO */
 function generate() {
 
   let html = "";
 
-  html += `<div class="card"><div class="title">${document.getElementById("name").value}</div></div>`;
+  // PROFILE
+  html += `
+    <div class="card" style="text-align:center">
+      ${profileImage ? `<img src="${profileImage}">` : ""}
+      <div class="title">${document.getElementById("name").value}</div>
+      <p>${document.getElementById("age").value} years old</p>
+    </div>
+  `;
 
-  html += `<div class="card">
-    <b>DOB:</b> ${document.getElementById("dob").value}<br>
-    <b>Age:</b> ${document.getElementById("age").value}<br>
-    <b>Location:</b> ${document.getElementById("city").value}, ${document.getElementById("state").value}, ${document.getElementById("country").value}<br>
-    <b>Phone:</b> ${document.getElementById("phone").value}
-  </div>`;
+  // INFO
+  html += `
+    <div class="card">
+      <b>DOB:</b> ${document.getElementById("dob").value}<br>
+      <b>Location:</b> ${document.getElementById("city").value}, ${document.getElementById("state").value}, ${document.getElementById("country").value}<br>
+      <b>Phone:</b> ${document.getElementById("phone").value}
+    </div>
+  `;
 
-  // Schools
+  // SCHOOLS
   let count = document.getElementById("schoolCount").value;
   let schoolHTML = "";
 
@@ -205,25 +241,29 @@ function generate() {
 
   html += `<div class="card"><h3>Schools</h3>${schoolHTML}</div>`;
 
-  // College
+  // COLLEGE
   if (document.getElementById("collegeYes").value === "yes") {
-    html += `<div class="card">
-      <h3>College</h3>
-      ${document.getElementById("collegeName").value} <br>
-      ${document.getElementById("collegePlace").value} <br>
-      ${document.getElementById("course").value}
-    </div>`;
+    html += `
+      <div class="card">
+        <h3>College</h3>
+        ${document.getElementById("collegeName").value}<br>
+        ${document.getElementById("collegePlace").value}<br>
+        ${document.getElementById("course").value}
+      </div>
+    `;
   }
 
-  // Skills
+  // SKILLS
   html += `<div class="card"><h3>Skills</h3>${document.getElementById("skills").value}</div>`;
 
-  // Project
-  html += `<div class="card">
-    <h3>Project</h3>
-    <b>${document.getElementById("projectName").value}</b><br>
-    ${document.getElementById("projectDesc").value}
-  </div>`;
+  // PROJECT
+  html += `
+    <div class="card">
+      <h3>Project</h3>
+      <b>${document.getElementById("projectName").value}</b><br>
+      ${document.getElementById("projectDesc").value}
+    </div>
+  `;
 
   document.getElementById("preview").innerHTML = html;
 }
