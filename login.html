@@ -1,98 +1,132 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-  <title>Web of Webs - Login</title>
+  <title>Login - Web of Webs</title>
 
-  <style>
+  <link rel="stylesheet" href="style.css">
 
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-      font-family:Arial;
-    }
-
-    body{
-      background:#0f172a;
-      height:100vh;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-    }
-
-    .login-box{
-      width:350px;
-      background:#111827;
-      padding:30px;
-      border-radius:15px;
-      text-align:center;
-      box-shadow:0 0 20px rgba(0,0,0,0.4);
-    }
-
-    h1{
-      color:white;
-      margin-bottom:20px;
-    }
-
-    input{
-      width:100%;
-      padding:12px;
-      margin:10px 0;
-      border:none;
-      border-radius:8px;
-      outline:none;
-      font-size:16px;
-    }
-
-    button{
-      width:100%;
-      padding:12px;
-      margin-top:10px;
-      border:none;
-      border-radius:8px;
-      background:#2563eb;
-      color:white;
-      font-size:16px;
-      cursor:pointer;
-      transition:0.3s;
-      font-weight:bold;
-    }
-
-    button:hover{
-      background:#1d4ed8;
-    }
-
-    .google-btn{
-      background:white;
-      color:black;
-    }
-
-    .google-btn:hover{
-      background:#e5e7eb;
-    }
-
-    p{
-      color:#9ca3af;
-      margin-top:15px;
-      font-size:14px;
-    }
-
-  </style>
 </head>
 
-<body>
+<body class="login-page">
 
-  <div class="login-box">
+<div class="login-box">
 
-    <h1>🔐 Web of Webs</h1>
+  <h1>Welcome To Web of Webs</h1>
 
-    <input type="email" id="email" placeholder="Enter Email">
+  <input type="email" id="email" placeholder="Enter Email">
 
-    <input type="password" id="password" placeholder="Enter Password">
+  <input type="password" id="password" placeholder="Enter Password">
 
-    <button onclick="signup()">Create Account</button>
+  <button onclick="signup()">Create Account</button>
 
-    <
+  <button onclick="login()">Login</button>
+
+  <button onclick="googleLogin()" class="google-btn">
+    Continue with Google
+  </button>
+
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword
+}
+
+from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBBg5ULPiuynvTnFtVJSYIq2THUJU1-ODo",
+  authDomain: "web-of-webs-5dcc6.firebaseapp.com",
+  projectId: "web-of-webs-5dcc6",
+  storageBucket: "web-of-webs-5dcc6.firebasestorage.app",
+  messagingSenderId: "716021090393",
+  appId: "1:716021090393:web:6ccf781be1d36d49408948",
+  measurementId: "G-WNJK1QDBV8"
+};
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
+const provider = new GoogleAuthProvider();
+
+window.googleLogin = function () {
+
+  signInWithPopup(auth, provider)
+
+  .then((result) => {
+
+    localStorage.setItem("username", result.user.displayName);
+
+    window.location.href = "dashboard.html";
+
+  })
+
+  .catch((error) => {
+
+    alert(error.message);
+
+  });
+
+};
+
+window.signup = function () {
+
+  createUserWithEmailAndPassword(
+    auth,
+    email.value,
+    password.value
+  )
+
+  .then(() => {
+
+    localStorage.setItem("username", email.value);
+
+    window.location.href = "dashboard.html";
+
+  })
+
+  .catch((error) => {
+
+    alert(error.message);
+
+  });
+
+};
+
+window.login = function () {
+
+  signInWithEmailAndPassword(
+    auth,
+    email.value,
+    password.value
+  )
+
+  .then(() => {
+
+    localStorage.setItem("username", email.value);
+
+    window.location.href = "dashboard.html";
+
+  })
+
+  .catch((error) => {
+
+    alert(error.message);
+
+  });
+
+};
+
+</script>
+
+</body>
+</html>
