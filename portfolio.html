@@ -1,24 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>Portfolio Builder</title>
+<title>AI Portfolio Builder</title>
 
 <link rel="stylesheet" href="style.css">
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
 <style>
 
-body{
+*{
 margin:0;
+padding:0;
+box-sizing:border-box;
 font-family:Inter,sans-serif;
+}
+
+body{
 background:#020617;
 color:white;
+overflow-x:hidden;
 }
 
 .topbar{
@@ -27,6 +32,9 @@ justify-content:space-between;
 align-items:center;
 padding:20px 40px;
 background:#0f172a;
+position:sticky;
+top:0;
+z-index:100;
 }
 
 .topbar a{
@@ -40,115 +48,146 @@ gap:30px;
 padding:30px;
 }
 
-.form-section{
+.form-panel{
 width:35%;
 background:rgba(255,255,255,0.06);
-padding:25px;
-border-radius:24px;
 backdrop-filter:blur(20px);
+padding:25px;
+border-radius:25px;
 height:90vh;
 overflow:auto;
 }
 
-.form-section h2{
+.form-panel h2{
 margin-bottom:20px;
 }
 
-.form-section input,
-.form-section textarea{
+.form-panel input,
+.form-panel textarea,
+.form-panel select{
 width:100%;
-padding:14px;
-margin-top:12px;
+padding:15px;
+margin-top:14px;
 border:none;
-border-radius:12px;
+border-radius:14px;
 background:#1e293b;
 color:white;
+font-size:15px;
 }
 
-.form-section textarea{
+.form-panel textarea{
 height:100px;
 resize:none;
 }
 
-.form-section button{
+.form-panel button{
 width:100%;
-padding:14px;
-margin-top:15px;
+padding:15px;
+margin-top:16px;
 border:none;
-border-radius:12px;
+border-radius:14px;
 background:linear-gradient(135deg,#2563eb,#7c3aed);
 color:white;
 font-size:16px;
 cursor:pointer;
+transition:0.3s;
 }
 
-.preview-section{
+.form-panel button:hover{
+transform:scale(1.03);
+}
+
+.preview-panel{
 flex:1;
 display:flex;
 justify-content:center;
 align-items:flex-start;
 }
 
-.portfolio-card{
+.portfolio{
 width:100%;
-max-width:800px;
+max-width:850px;
 background:linear-gradient(135deg,#111827,#1e293b);
-border-radius:30px;
+border-radius:35px;
 padding:40px;
-box-shadow:0 0 40px rgba(0,0,0,0.4);
+box-shadow:0 0 50px rgba(0,0,0,0.5);
 }
 
-.profile{
+.hero{
 text-align:center;
 }
 
-.profile img{
-width:150px;
-height:150px;
+.hero img{
+width:170px;
+height:170px;
 border-radius:50%;
 object-fit:cover;
-border:5px solid #2563eb;
+border:6px solid #3b82f6;
 }
 
-.profile h1{
+.hero h1{
+font-size:48px;
 margin-top:20px;
-font-size:42px;
 }
 
-.profile p{
-opacity:0.8;
-line-height:1.7;
-}
-
-.section{
-margin-top:35px;
-}
-
-.section h2{
-margin-bottom:15px;
+.hero h3{
+margin-top:10px;
 color:#60a5fa;
 }
 
-.skill-tags{
-display:flex;
-flex-wrap:wrap;
-gap:10px;
+.hero p{
+margin-top:20px;
+line-height:1.8;
+opacity:0.85;
 }
 
-.skill-tags span{
+.section{
+margin-top:40px;
+}
+
+.section h2{
+margin-bottom:18px;
+color:#60a5fa;
+}
+
+.skills{
+display:flex;
+flex-wrap:wrap;
+gap:12px;
+}
+
+.skills span{
+padding:10px 18px;
 background:#2563eb;
-padding:10px 16px;
 border-radius:30px;
 }
 
+.edu-card{
+background:rgba(255,255,255,0.06);
+padding:18px;
+border-radius:18px;
+margin-top:15px;
+}
+
+.ai-box{
+background:rgba(255,255,255,0.05);
+padding:20px;
+border-radius:20px;
+margin-top:25px;
+}
+
+.ai-box h3{
+margin-bottom:12px;
+}
+
 .download-btn{
-margin-top:30px;
+margin-top:35px;
+padding:18px;
 width:100%;
-padding:16px;
-font-size:18px;
 border:none;
-border-radius:14px;
+border-radius:16px;
 background:linear-gradient(135deg,#2563eb,#7c3aed);
+font-size:18px;
 color:white;
 cursor:pointer;
 }
@@ -159,7 +198,7 @@ cursor:pointer;
 flex-direction:column;
 }
 
-.form-section{
+.form-panel{
 width:100%;
 height:auto;
 }
@@ -174,7 +213,7 @@ height:auto;
 
 <div class="topbar">
 
-<h1>🎨 Portfolio Builder</h1>
+<h1>🚀 AI Portfolio Builder</h1>
 
 <a href="dashboard.html">
 ← Dashboard
@@ -184,81 +223,69 @@ height:auto;
 
 <div class="container">
 
-<div class="form-section">
+<div class="form-panel">
 
 <h2>Create Your Portfolio</h2>
 
-<input
-type="file"
-id="imageUpload"
->
+<input type="file" id="photo">
 
-<input
-type="text"
-id="name"
-placeholder="Full Name"
->
+<input type="text" id="name" placeholder="Full Name">
 
-<input
-type="text"
-id="role"
-placeholder="Your Role"
->
+<input type="date" id="dob">
+
+<input type="text" id="country" placeholder="Country">
+
+<input type="text" id="state" placeholder="State">
+
+<input type="text" id="city" placeholder="City / Village">
+
+<input type="text" id="role" placeholder="Your Profession">
+
+<textarea id="about" placeholder="Write About Yourself"></textarea>
+
+<input type="text" id="skills" placeholder="Skills (comma separated)">
+
+<input type="text" id="school" placeholder="School Name">
+
+<input type="text" id="college" placeholder="College Name">
+
+<input type="email" id="email" placeholder="Email">
+
+<input type="text" id="phone" placeholder="Phone Number">
+
+<div class="ai-box">
+
+<h3>🤖 AI Assistant</h3>
 
 <textarea
-id="about"
-placeholder="About Yourself"
+id="aiQuestion"
+placeholder="Tell AI about yourself..."
 ></textarea>
 
-<input
-type="text"
-id="skills"
-placeholder="Skills (comma separated)"
->
-
-<input
-type="email"
-id="email"
-placeholder="Email"
->
-
-<input
-type="text"
-id="phone"
-placeholder="Phone Number"
->
-
-<input
-type="text"
-id="github"
-placeholder="GitHub Link"
->
-
-<input
-type="text"
-id="linkedin"
-placeholder="LinkedIn Link"
->
-
-<button onclick="updatePortfolio()">
-Generate Portfolio
-</button>
-
-<button onclick="downloadPortfolio()">
-Download Portfolio
+<button onclick="generateAbout()">
+Generate About Me
 </button>
 
 </div>
 
-<div class="preview-section">
+<button onclick="generatePortfolio()">
+Generate Portfolio
+</button>
 
-<div class="portfolio-card"
-id="portfolioCard">
+<button onclick="downloadPDF()">
+Download PDF
+</button>
 
-<div class="profile">
+</div>
+
+<div class="preview-panel">
+
+<div class="portfolio" id="portfolio">
+
+<div class="hero">
 
 <img
-id="profileImage"
+id="previewPhoto"
 src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1200"
 >
 
@@ -267,21 +294,34 @@ Your Name
 </h1>
 
 <h3 id="previewRole">
-Your Role
+Your Profession
 </h3>
 
 <p id="previewAbout">
-Your portfolio preview will appear here.
+Your About Me section will appear here.
 </p>
 
 </div>
 
 <div class="section">
 
-<h2>Skills</h2>
+<h2>🌍 Personal Info</h2>
 
-<div class="skill-tags"
-id="skillTags">
+<p id="previewLocation">
+Country • State • City
+</p>
+
+<p id="previewDOB">
+DOB: --
+</p>
+
+</div>
+
+<div class="section">
+
+<h2>🧠 Skills</h2>
+
+<div class="skills" id="previewSkills">
 
 <span>HTML</span>
 <span>CSS</span>
@@ -293,22 +333,32 @@ id="skillTags">
 
 <div class="section">
 
-<h2>Contact</h2>
+<h2>🎓 Education</h2>
+
+<div class="edu-card">
+<p id="previewSchool">
+School: --
+</p>
+</div>
+
+<div class="edu-card">
+<p id="previewCollege">
+College: --
+</p>
+</div>
+
+</div>
+
+<div class="section">
+
+<h2>📞 Contact</h2>
 
 <p id="previewEmail">
-Email: example@gmail.com
+Email: --
 </p>
 
 <p id="previewPhone">
-Phone: +91 XXXXX XXXXX
-</p>
-
-<p id="previewGithub">
-GitHub: github.com
-</p>
-
-<p id="previewLinkedin">
-LinkedIn: linkedin.com
+Phone: --
 </p>
 
 </div>
@@ -321,91 +371,108 @@ LinkedIn: linkedin.com
 
 <script>
 
-const imageUpload =
-document.getElementById("imageUpload");
+document.getElementById("photo")
+.addEventListener("change",(e)=>{
 
-imageUpload.addEventListener("change",(e)=>{
-
-const file = e.target.files[0];
+const file=e.target.files[0];
 
 if(file){
 
-document.getElementById(
-"profileImage"
-).src = URL.createObjectURL(file);
+document.getElementById("previewPhoto")
+.src=URL.createObjectURL(file);
 
 }
 
 });
 
-function updatePortfolio(){
+function generateAbout(){
 
-document.getElementById(
-"previewName"
-).innerText =
+const text =
+document.getElementById("aiQuestion").value;
+
+const about =
+`Passionate and creative individual with strong interest in ${text}. Dedicated to learning modern skills, building projects and growing professionally in the digital world.`;
+
+document.getElementById("about").value=about;
+
+}
+
+function generatePortfolio(){
+
+document.getElementById("previewName")
+.innerText =
 document.getElementById("name").value;
 
-document.getElementById(
-"previewRole"
-).innerText =
+document.getElementById("previewRole")
+.innerText =
 document.getElementById("role").value;
 
-document.getElementById(
-"previewAbout"
-).innerText =
+document.getElementById("previewAbout")
+.innerText =
 document.getElementById("about").value;
 
-document.getElementById(
-"previewEmail"
-).innerText =
+document.getElementById("previewLocation")
+.innerText =
+`${document.getElementById("country").value}
+ •
+${document.getElementById("state").value}
+ •
+${document.getElementById("city").value}`;
+
+document.getElementById("previewDOB")
+.innerText =
+"Date of Birth: " +
+document.getElementById("dob").value;
+
+document.getElementById("previewSchool")
+.innerText =
+"School: " +
+document.getElementById("school").value;
+
+document.getElementById("previewCollege")
+.innerText =
+"College: " +
+document.getElementById("college").value;
+
+document.getElementById("previewEmail")
+.innerText =
 "Email: " +
 document.getElementById("email").value;
 
-document.getElementById(
-"previewPhone"
-).innerText =
+document.getElementById("previewPhone")
+.innerText =
 "Phone: " +
 document.getElementById("phone").value;
-
-document.getElementById(
-"previewGithub"
-).innerText =
-"GitHub: " +
-document.getElementById("github").value;
-
-document.getElementById(
-"previewLinkedin"
-).innerText =
-"LinkedIn: " +
-document.getElementById("linkedin").value;
 
 const skills =
 document.getElementById("skills")
 .value.split(",");
 
-let skillsHTML = "";
+let output="";
 
 skills.forEach(skill=>{
 
-skillsHTML +=
-`<span>${skill}</span>`;
+output += `<span>${skill}</span>`;
 
 });
 
-document.getElementById(
-"skillTags"
-).innerHTML = skillsHTML;
+document.getElementById("previewSkills")
+.innerHTML = output;
 
 }
 
-function downloadPortfolio(){
+function downloadPDF(){
 
-window.print();
+const element =
+document.getElementById("portfolio");
+
+html2pdf()
+.from(element)
+.save("portfolio.pdf");
 
 }
 
 </script>
 
 </body>
-
 </html>
