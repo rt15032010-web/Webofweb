@@ -1,66 +1,242 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Advanced Photo Editor</title>
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>AI Photo Editor</title>
+
 <link rel="stylesheet" href="style.css">
+
+<style>
+
+.editor-container{
+display:flex;
+gap:30px;
+padding:30px;
+min-height:100vh;
+background:#020617;
+color:white;
+}
+
+.tools{
+width:280px;
+background:rgba(255,255,255,0.08);
+padding:20px;
+border-radius:20px;
+backdrop-filter:blur(20px);
+}
+
+.tools button,
+.tools input{
+width:100%;
+margin-top:12px;
+padding:14px;
+border:none;
+border-radius:12px;
+}
+
+.preview{
+flex:1;
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+}
+
+.preview img{
+max-width:90%;
+max-height:70vh;
+border-radius:20px;
+box-shadow:0 0 30px rgba(0,0,0,0.4);
+transition:0.3s;
+}
+
+.topbar{
+padding:20px 40px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+background:#0f172a;
+}
+
+.topbar a{
+color:white;
+text-decoration:none;
+}
+
+.range{
+accent-color:#2563eb;
+}
+
+</style>
+
 </head>
-<body class="tool-body">
 
-<div class="tool-navbar">
-  <h1>🎨 AI Photo Editor</h1>
-  <a href="dashboard.html">← Dashboard</a>
-</div>
+<body>
 
-<div class="editor-layout">
+<div class="topbar">
 
-<div class="editor-sidebar">
+<h1>🎨 AI Photo Editor</h1>
 
-<h2>Editing Tools</h2>
-
-<button>✂ Crop</button>
-<button>🔄 Rotate</button>
-<button>🌈 Filters</button>
-<button>☀ Brightness</button>
-<button>🎨 Contrast</button>
-<button>🌙 Shadows</button>
-<button>✨ Highlights</button>
-<button>🧼 Smooth Skin</button>
-<button>🪄 AI Enhance</button>
-<button>📸 Blur Background</button>
-<button>🖼 Add Frame</button>
-<button>📝 Add Text</button>
-<button>😊 Stickers</button>
-<button>💡 Light FX</button>
-<button>🌌 Neon Effect</button>
-<button>🧊 Glass Effect</button>
-<button>🔥 Fire Effect</button>
-<button>🌧 Rain Effect</button>
-<button>🎞 Vintage</button>
-<button>🖌 Draw</button>
-<button>🧽 Remove Object</button>
-<button>📐 Resize</button>
-<button>🪞 Flip</button>
-<button>💾 Download HD</button>
+<a href="dashboard.html">
+← Dashboard
+</a>
 
 </div>
 
-<div class="editor-main">
+<div class="editor-container">
 
-<label class="upload-box">
-<input type="file" hidden>
-<h2>Upload Your Photo</h2>
-<p>Drag & Drop or Select Image</p>
+<div class="tools">
+
+<input type="file" id="upload">
+
+<button onclick="rotateImage()">
+🔄 Rotate
+</button>
+
+<button onclick="flipImage()">
+🪞 Flip
+</button>
+
+<button onclick="grayScale()">
+⚫ Grayscale
+</button>
+
+<button onclick="blurImage()">
+🌫 Blur
+</button>
+
+<button onclick="resetImage()">
+♻ Reset
+</button>
+
+<button onclick="downloadImage()">
+💾 Download
+</button>
+
+<label>
+☀ Brightness
 </label>
 
-<div class="preview-box">
-<img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1200" alt="preview">
+<input
+type="range"
+min="50"
+max="200"
+value="100"
+class="range"
+id="brightness"
+oninput="changeBrightness()"
+>
+
 </div>
+
+<div class="preview">
+
+<img
+id="previewImage"
+src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1200"
+>
 
 </div>
 
 </div>
+
+<script>
+
+const upload = document.getElementById("upload");
+
+const image = document.getElementById("previewImage");
+
+let rotation = 0;
+
+let flip = 1;
+
+upload.addEventListener("change",(e)=>{
+
+const file = e.target.files[0];
+
+if(file){
+
+image.src = URL.createObjectURL(file);
+
+}
+
+});
+
+function rotateImage(){
+
+rotation += 90;
+
+image.style.transform =
+`rotate(${rotation}deg) scaleX(${flip})`;
+
+}
+
+function flipImage(){
+
+flip *= -1;
+
+image.style.transform =
+`rotate(${rotation}deg) scaleX(${flip})`;
+
+}
+
+function grayScale(){
+
+image.style.filter = "grayscale(100%)";
+
+}
+
+function blurImage(){
+
+image.style.filter = "blur(4px)";
+
+}
+
+function changeBrightness(){
+
+const value =
+document.getElementById("brightness").value;
+
+image.style.filter =
+`brightness(${value}%)`;
+
+}
+
+function resetImage(){
+
+image.style.filter = "none";
+
+image.style.transform =
+"rotate(0deg) scaleX(1)";
+
+rotation = 0;
+
+flip = 1;
+
+document.getElementById("brightness").value = 100;
+
+}
+
+function downloadImage(){
+
+const link = document.createElement("a");
+
+link.href = image.src;
+
+link.download = "edited-image.jpg";
+
+link.click();
+
+}
+
+</script>
 
 </body>
+
 </html>
