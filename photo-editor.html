@@ -14,53 +14,24 @@ content="width=device-width, initial-scale=1.0">
 
 <style>
 
-.editor-container{
-display:flex;
-gap:30px;
-padding:30px;
-min-height:100vh;
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Inter,sans-serif;
+}
+
+body{
 background:#020617;
 color:white;
-}
-
-.tools{
-width:280px;
-background:rgba(255,255,255,0.08);
-padding:20px;
-border-radius:20px;
-backdrop-filter:blur(20px);
-}
-
-.tools button,
-.tools input{
-width:100%;
-margin-top:12px;
-padding:14px;
-border:none;
-border-radius:12px;
-}
-
-.preview{
-flex:1;
-display:flex;
-justify-content:center;
-align-items:center;
-flex-direction:column;
-}
-
-.preview img{
-max-width:90%;
-max-height:70vh;
-border-radius:20px;
-box-shadow:0 0 30px rgba(0,0,0,0.4);
-transition:0.3s;
+overflow:hidden;
 }
 
 .topbar{
-padding:20px 40px;
 display:flex;
 justify-content:space-between;
 align-items:center;
+padding:20px 40px;
 background:#0f172a;
 }
 
@@ -69,8 +40,68 @@ color:white;
 text-decoration:none;
 }
 
-.range{
-accent-color:#2563eb;
+.container{
+display:flex;
+height:calc(100vh - 80px);
+}
+
+.sidebar{
+width:320px;
+background:rgba(255,255,255,0.06);
+backdrop-filter:blur(20px);
+padding:20px;
+overflow:auto;
+}
+
+.sidebar h2{
+margin-bottom:20px;
+}
+
+.sidebar button,
+.sidebar input,
+.sidebar select,
+.sidebar textarea{
+width:100%;
+padding:14px;
+margin-top:12px;
+border:none;
+border-radius:14px;
+background:#1e293b;
+color:white;
+}
+
+.sidebar button{
+background:linear-gradient(135deg,#2563eb,#7c3aed);
+cursor:pointer;
+font-size:15px;
+}
+
+.editor{
+flex:1;
+display:flex;
+justify-content:center;
+align-items:center;
+position:relative;
+overflow:hidden;
+}
+
+.editor img{
+max-width:90%;
+max-height:85vh;
+border-radius:20px;
+transition:0.3s;
+box-shadow:0 0 40px rgba(0,0,0,0.5);
+}
+
+.ai-box{
+margin-top:30px;
+background:rgba(255,255,255,0.04);
+padding:18px;
+border-radius:20px;
+}
+
+.ai-box h3{
+margin-bottom:12px;
 }
 
 </style>
@@ -89,9 +120,11 @@ accent-color:#2563eb;
 
 </div>
 
-<div class="editor-container">
+<div class="container">
 
-<div class="tools">
+<div class="sidebar">
+
+<h2>Editing Tools</h2>
 
 <input type="file" id="upload">
 
@@ -103,42 +136,118 @@ accent-color:#2563eb;
 🪞 Flip
 </button>
 
-<button onclick="grayScale()">
-⚫ Grayscale
-</button>
-
-<button onclick="blurImage()">
-🌫 Blur
-</button>
-
-<button onclick="resetImage()">
+<button onclick="resetFilters()">
 ♻ Reset
 </button>
 
-<button onclick="downloadImage()">
-💾 Download
-</button>
-
-<label>
-☀ Brightness
-</label>
+<label>Brightness</label>
 
 <input
 type="range"
 min="50"
 max="200"
 value="100"
-class="range"
 id="brightness"
-oninput="changeBrightness()"
+oninput="applyFilters()"
 >
+
+<label>Blur</label>
+
+<input
+type="range"
+min="0"
+max="10"
+value="0"
+id="blur"
+oninput="applyFilters()"
+>
+
+<label>Grayscale</label>
+
+<input
+type="range"
+min="0"
+max="100"
+value="0"
+id="grayscale"
+oninput="applyFilters()"
+>
+
+<label>Contrast</label>
+
+<input
+type="range"
+min="50"
+max="200"
+value="100"
+id="contrast"
+oninput="applyFilters()"
+>
+
+<label>Saturation</label>
+
+<input
+type="range"
+min="50"
+max="200"
+value="100"
+id="saturate"
+oninput="applyFilters()"
+>
+
+<select id="backgroundSelect"
+onchange="changeBackground()">
+
+<option value="">
+Select Background
+</option>
+
+<option value="https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1600">
+Shimla Mountains
+</option>
+
+<option value="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1600">
+Beach
+</option>
+
+<option value="https://images.unsplash.com/photo-1494526585095-c41746248156?q=80&w=1600">
+Cyberpunk City
+</option>
+
+<option value="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1600">
+Sunset
+</option>
+
+</select>
+
+<button onclick="downloadImage()">
+💾 Download
+</button>
+
+<div class="ai-box">
+
+<h3>🤖 AI Assistant</h3>
+
+<textarea
+id="aiPrompt"
+placeholder="Example:
+Make cinematic
+Add Shimla background
+Make dreamy"
+></textarea>
+
+<button onclick="runAIEdit()">
+Generate AI Edit
+</button>
 
 </div>
 
-<div class="preview">
+</div>
+
+<div class="editor" id="editor">
 
 <img
-id="previewImage"
+id="image"
 src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1200"
 >
 
@@ -148,9 +257,11 @@ src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1200"
 
 <script>
 
-const upload = document.getElementById("upload");
+const upload =
+document.getElementById("upload");
 
-const image = document.getElementById("previewImage");
+const image =
+document.getElementById("image");
 
 let rotation = 0;
 
@@ -162,18 +273,51 @@ const file = e.target.files[0];
 
 if(file){
 
-image.src = URL.createObjectURL(file);
+image.src =
+URL.createObjectURL(file);
 
 }
 
 });
+
+function applyFilters(){
+
+const brightness =
+document.getElementById("brightness").value;
+
+const blur =
+document.getElementById("blur").value;
+
+const grayscale =
+document.getElementById("grayscale").value;
+
+const contrast =
+document.getElementById("contrast").value;
+
+const saturate =
+document.getElementById("saturate").value;
+
+image.style.filter =
+
+`brightness(${brightness}%)
+
+blur(${blur}px)
+
+grayscale(${grayscale}%)
+
+contrast(${contrast}%)
+
+saturate(${saturate}%)`;
+
+}
 
 function rotateImage(){
 
 rotation += 90;
 
 image.style.transform =
-`rotate(${rotation}deg) scaleX(${flip})`;
+`rotate(${rotation}deg)
+scaleX(${flip})`;
 
 }
 
@@ -182,50 +326,143 @@ function flipImage(){
 flip *= -1;
 
 image.style.transform =
-`rotate(${rotation}deg) scaleX(${flip})`;
+`rotate(${rotation}deg)
+scaleX(${flip})`;
 
 }
 
-function grayScale(){
+function resetFilters(){
 
-image.style.filter = "grayscale(100%)";
+document.getElementById(
+"brightness"
+).value = 100;
 
-}
+document.getElementById(
+"blur"
+).value = 0;
 
-function blurImage(){
+document.getElementById(
+"grayscale"
+).value = 0;
 
-image.style.filter = "blur(4px)";
+document.getElementById(
+"contrast"
+).value = 100;
 
-}
-
-function changeBrightness(){
-
-const value =
-document.getElementById("brightness").value;
-
-image.style.filter =
-`brightness(${value}%)`;
-
-}
-
-function resetImage(){
+document.getElementById(
+"saturate"
+).value = 100;
 
 image.style.filter = "none";
-
-image.style.transform =
-"rotate(0deg) scaleX(1)";
 
 rotation = 0;
 
 flip = 1;
 
-document.getElementById("brightness").value = 100;
+image.style.transform =
+"rotate(0deg) scaleX(1)";
+
+document.getElementById(
+"editor"
+).style.backgroundImage = "none";
+
+}
+
+function changeBackground(){
+
+const bg =
+document.getElementById(
+"backgroundSelect"
+).value;
+
+document.getElementById(
+"editor"
+).style.backgroundImage =
+`url(${bg})`;
+
+document.getElementById(
+"editor"
+).style.backgroundSize =
+"cover";
+
+document.getElementById(
+"editor"
+).style.backgroundPosition =
+"center";
+
+}
+
+function runAIEdit(){
+
+const prompt =
+document.getElementById(
+"aiPrompt"
+).value.toLowerCase();
+
+if(prompt.includes("cinematic")){
+
+document.getElementById(
+"contrast"
+).value = 140;
+
+document.getElementById(
+"saturate"
+).value = 130;
+
+document.getElementById(
+"brightness"
+).value = 110;
+
+}
+
+if(prompt.includes("dreamy")){
+
+document.getElementById(
+"blur"
+).value = 2;
+
+document.getElementById(
+"brightness"
+).value = 120;
+
+}
+
+if(prompt.includes("black")){
+
+document.getElementById(
+"grayscale"
+).value = 100;
+
+}
+
+if(prompt.includes("shimla")){
+
+document.getElementById(
+"backgroundSelect"
+).selectedIndex = 1;
+
+changeBackground();
+
+}
+
+if(prompt.includes("beach")){
+
+document.getElementById(
+"backgroundSelect"
+).selectedIndex = 2;
+
+changeBackground();
+
+}
+
+applyFilters();
 
 }
 
 function downloadImage(){
 
-const link = document.createElement("a");
+const link =
+document.createElement("a");
 
 link.href = image.src;
 
