@@ -8,9 +8,9 @@
 <meta name="viewport"
 content="width=device-width, initial-scale=1.0">
 
-<title>AI Photo Editor</title>
+<title>Web of Webs AI Photo Editor</title>
 
-<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 
@@ -18,7 +18,7 @@ content="width=device-width, initial-scale=1.0">
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Inter,sans-serif;
+font-family:'Poppins',sans-serif;
 }
 
 body{
@@ -28,93 +28,154 @@ overflow-x:hidden;
 overflow-y:auto;
 }
 
+/* TOPBAR */
+
 .topbar{
+height:80px;
 display:flex;
 justify-content:space-between;
 align-items:center;
-padding:20px 40px;
-background:#0f172a;
+padding:0 35px;
+background:rgba(255,255,255,0.05);
+backdrop-filter:blur(20px);
 position:sticky;
 top:0;
 z-index:1000;
 }
 
-.topbar a{
-color:white;
-text-decoration:none;
-font-size:18px;
+.logo{
+font-size:30px;
+font-weight:700;
+color:#60a5fa;
 }
+
+.topbar button{
+padding:12px 25px;
+border:none;
+border-radius:50px;
+background:linear-gradient(45deg,#2563eb,#3b82f6);
+color:white;
+font-weight:600;
+cursor:pointer;
+}
+
+/* MAIN */
 
 .container{
 display:flex;
 min-height:calc(100vh - 80px);
 }
 
+/* SIDEBAR */
+
 .sidebar{
-width:320px;
-background:rgba(255,255,255,0.06);
-backdrop-filter:blur(20px);
-padding:20px;
+width:360px;
+background:#0f172a;
+padding:25px;
 overflow-y:auto;
+border-right:1px solid rgba(255,255,255,0.08);
 }
 
-.sidebar h2{
-margin-bottom:20px;
+.section-title{
+font-size:17px;
+margin-top:25px;
+margin-bottom:12px;
+font-weight:600;
+color:#cbd5e1;
 }
 
-.sidebar button,
 .sidebar input,
 .sidebar select,
-.sidebar textarea{
+.sidebar textarea,
+.sidebar button{
 width:100%;
 padding:14px;
-margin-top:12px;
+margin-top:10px;
 border:none;
-border-radius:14px;
+outline:none;
+border-radius:16px;
 background:#1e293b;
 color:white;
 font-size:15px;
 }
 
-.sidebar button{
-background:linear-gradient(135deg,#2563eb,#7c3aed);
-cursor:pointer;
+.sidebar textarea{
+height:120px;
+resize:none;
 }
+
+.sidebar button{
+background:linear-gradient(45deg,#2563eb,#3b82f6);
+cursor:pointer;
+font-weight:600;
+transition:0.3s;
+}
+
+.sidebar button:hover{
+transform:translateY(-3px);
+}
+
+/* EDITOR */
 
 .editor{
 flex:1;
 display:flex;
 justify-content:center;
 align-items:center;
+padding:40px;
 position:relative;
-padding:30px;
-min-height:100vh;
 background:#020617;
 background-size:cover;
 background-position:center;
+transition:0.4s;
 }
 
 .editor img{
 max-width:90%;
 max-height:80vh;
-border-radius:20px;
-transition:0.3s;
-box-shadow:0 0 40px rgba(0,0,0,0.5);
+border-radius:25px;
+box-shadow:0 20px 50px rgba(0,0,0,0.6);
+transition:0.4s;
 object-fit:contain;
 }
 
+/* AI BOX */
+
 .ai-box{
-margin-top:30px;
 background:rgba(255,255,255,0.05);
-padding:18px;
+padding:20px;
 border-radius:20px;
+margin-top:25px;
 }
 
-.ai-box h3{
-margin-bottom:12px;
+.ai-title{
+font-size:20px;
+margin-bottom:15px;
+font-weight:600;
 }
 
-@media(max-width:900px){
+/* ERROR BOX */
+
+.error-box{
+margin-top:25px;
+background:#7f1d1d;
+padding:18px;
+border-radius:18px;
+}
+
+.error-title{
+font-weight:700;
+margin-bottom:10px;
+}
+
+.error-item{
+font-size:14px;
+margin-bottom:8px;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:1000px){
 
 .container{
 flex-direction:column;
@@ -126,6 +187,7 @@ width:100%;
 
 .editor{
 padding:20px;
+min-height:100vh;
 }
 
 .editor img{
@@ -140,93 +202,98 @@ max-width:100%;
 
 <body>
 
+<!-- TOPBAR -->
+
 <div class="topbar">
 
-<h1>🎨 AI Photo Editor</h1>
+<div class="logo">
+AI Photo Editor
+</div>
 
-<a href="dashboard.html">
-← Dashboard
-</a>
+<button onclick="downloadImage()">
+Download Image
+</button>
 
 </div>
 
+<!-- MAIN -->
+
 <div class="container">
+
+<!-- SIDEBAR -->
 
 <div class="sidebar">
 
-<h2>Editing Tools</h2>
+<div class="section-title">
+Upload Image
+</div>
 
 <input type="file" id="upload">
 
+<div class="section-title">
+Basic Adjustments
+</div>
+
+<label>Brightness</label>
+<input type="range" min="50" max="200" value="100" id="brightness" oninput="applyFilters()">
+
+<label>Contrast</label>
+<input type="range" min="50" max="200" value="100" id="contrast" oninput="applyFilters()">
+
+<label>Saturation</label>
+<input type="range" min="50" max="200" value="100" id="saturate" oninput="applyFilters()">
+
+<label>Blur</label>
+<input type="range" min="0" max="10" value="0" id="blur" oninput="applyFilters()">
+
+<label>Grayscale</label>
+<input type="range" min="0" max="100" value="0" id="grayscale" oninput="applyFilters()">
+
+<div class="section-title">
+Advanced Effects
+</div>
+
+<button onclick="applyVintage()">
+Vintage Filter
+</button>
+
+<button onclick="applyHDR()">
+HDR Effect
+</button>
+
+<button onclick="applyNeon()">
+Neon Glow
+</button>
+
+<button onclick="applyDreamy()">
+Dreamy Effect
+</button>
+
+<button onclick="applySharp()">
+Sharpen
+</button>
+
+<div class="section-title">
+Transform Tools
+</div>
+
 <button onclick="rotateImage()">
-🔄 Rotate
+Rotate
 </button>
 
 <button onclick="flipImage()">
-🪞 Flip
+Flip
 </button>
 
-<button onclick="resetFilters()">
-♻ Reset
+<button onclick="resetEditor()">
+Reset All
 </button>
 
-<label>Brightness</label>
+<div class="section-title">
+AI Backgrounds
+</div>
 
-<input
-type="range"
-min="50"
-max="200"
-value="100"
-id="brightness"
-oninput="applyFilters()"
->
-
-<label>Blur</label>
-
-<input
-type="range"
-min="0"
-max="10"
-value="0"
-id="blur"
-oninput="applyFilters()"
->
-
-<label>Grayscale</label>
-
-<input
-type="range"
-min="0"
-max="100"
-value="0"
-id="grayscale"
-oninput="applyFilters()"
->
-
-<label>Contrast</label>
-
-<input
-type="range"
-min="50"
-max="200"
-value="100"
-id="contrast"
-oninput="applyFilters()"
->
-
-<label>Saturation</label>
-
-<input
-type="range"
-min="50"
-max="200"
-value="100"
-id="saturate"
-oninput="applyFilters()"
->
-
-<select id="backgroundSelect"
-onchange="changeBackground()">
+<select id="backgroundSelect" onchange="changeBackground()">
 
 <option value="">
 Select Background
@@ -248,23 +315,27 @@ Cyberpunk City
 Sunset
 </option>
 
+<option value="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?q=80&w=1600">
+Snow Mountains
+</option>
+
 </select>
 
-<button onclick="downloadImage()">
-💾 Download
-</button>
+<!-- AI ASSISTANT -->
 
 <div class="ai-box">
 
-<h3>🤖 AI Assistant</h3>
+<div class="ai-title">
+🤖 AI Assistant
+</div>
 
-<textarea
-id="aiPrompt"
+<textarea id="aiPrompt"
 placeholder="Example:
 Make cinematic
-Add Shimla background
-Make dreamy"
-></textarea>
+Make anime
+Add shimla background
+Make black and white
+Create dreamy look"></textarea>
 
 <button onclick="runAIEdit()">
 Generate AI Edit
@@ -272,7 +343,39 @@ Generate AI Edit
 
 </div>
 
+<!-- AI ERROR DETECTOR -->
+
+<div class="error-box">
+
+<div class="error-title">
+⚠ AI Error Detector
 </div>
+
+<div class="error-item">
+• Detect low brightness
+</div>
+
+<div class="error-item">
+• Detect poor contrast
+</div>
+
+<div class="error-item">
+• Detect oversaturated image
+</div>
+
+<div class="error-item">
+• Detect blurry image
+</div>
+
+<div class="error-item">
+• Suggest better effects
+</div>
+
+</div>
+
+</div>
+
+<!-- EDITOR -->
 
 <div class="editor" id="editor">
 
@@ -287,15 +390,16 @@ src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1200"
 
 <script>
 
-const upload =
-document.getElementById("upload");
-
 const image =
 document.getElementById("image");
 
-let rotation = 0;
+const upload =
+document.getElementById("upload");
 
+let rotation = 0;
 let flip = 1;
+
+/* UPLOAD */
 
 upload.addEventListener("change",(e)=>{
 
@@ -310,16 +414,12 @@ URL.createObjectURL(file);
 
 });
 
+/* FILTERS */
+
 function applyFilters(){
 
 const brightness =
 document.getElementById("brightness").value;
-
-const blur =
-document.getElementById("blur").value;
-
-const grayscale =
-document.getElementById("grayscale").value;
 
 const contrast =
 document.getElementById("contrast").value;
@@ -327,19 +427,64 @@ document.getElementById("contrast").value;
 const saturate =
 document.getElementById("saturate").value;
 
+const blur =
+document.getElementById("blur").value;
+
+const grayscale =
+document.getElementById("grayscale").value;
+
 image.style.filter =
 
 `brightness(${brightness}%)
 
-blur(${blur}px)
-
-grayscale(${grayscale}%)
-
 contrast(${contrast}%)
 
-saturate(${saturate}%)`;
+saturate(${saturate}%)
+
+blur(${blur}px)
+
+grayscale(${grayscale}%)`;
 
 }
+
+/* EFFECTS */
+
+function applyVintage(){
+
+image.style.filter =
+"sepia(70%) contrast(110%) brightness(95%)";
+
+}
+
+function applyHDR(){
+
+image.style.filter =
+"contrast(150%) saturate(160%) brightness(110%)";
+
+}
+
+function applyNeon(){
+
+image.style.filter =
+"contrast(180%) saturate(200%) hue-rotate(20deg)";
+
+}
+
+function applyDreamy(){
+
+image.style.filter =
+"brightness(120%) blur(2px) saturate(130%)";
+
+}
+
+function applySharp(){
+
+image.style.filter =
+"contrast(170%) brightness(105%)";
+
+}
+
+/* ROTATE */
 
 function rotateImage(){
 
@@ -351,6 +496,8 @@ scaleX(${flip})`;
 
 }
 
+/* FLIP */
+
 function flipImage(){
 
 flip *= -1;
@@ -361,123 +508,131 @@ scaleX(${flip})`;
 
 }
 
-function resetFilters(){
+/* RESET */
 
-document.getElementById(
-"brightness"
-).value = 100;
+function resetEditor(){
 
-document.getElementById(
-"blur"
-).value = 0;
-
-document.getElementById(
-"grayscale"
-).value = 0;
-
-document.getElementById(
-"contrast"
-).value = 100;
-
-document.getElementById(
-"saturate"
-).value = 100;
+document.getElementById("brightness").value = 100;
+document.getElementById("contrast").value = 100;
+document.getElementById("saturate").value = 100;
+document.getElementById("blur").value = 0;
+document.getElementById("grayscale").value = 0;
 
 image.style.filter = "none";
 
 rotation = 0;
-
 flip = 1;
 
 image.style.transform =
 "rotate(0deg) scaleX(1)";
 
-document.getElementById(
-"editor"
-).style.backgroundImage = "none";
+document.getElementById("editor")
+.style.backgroundImage = "none";
 
 }
+
+/* BACKGROUND */
 
 function changeBackground(){
 
 const bg =
-document.getElementById(
-"backgroundSelect"
-).value;
+document.getElementById("backgroundSelect").value;
 
-document.getElementById(
-"editor"
-).style.backgroundImage =
+document.getElementById("editor")
+.style.backgroundImage =
 `url(${bg})`;
 
 }
 
+/* AI EDITOR */
+
 function runAIEdit(){
 
 const prompt =
-document.getElementById(
-"aiPrompt"
-).value.toLowerCase();
+document.getElementById("aiPrompt")
+.value.toLowerCase();
+
+/* CINEMATIC */
 
 if(prompt.includes("cinematic")){
 
-document.getElementById(
-"contrast"
-).value = 140;
-
-document.getElementById(
-"saturate"
-).value = 130;
-
-document.getElementById(
-"brightness"
-).value = 110;
+image.style.filter =
+"contrast(150%) saturate(140%) brightness(105%)";
 
 }
+
+/* DREAMY */
 
 if(prompt.includes("dreamy")){
 
-document.getElementById(
-"blur"
-).value = 2;
-
-document.getElementById(
-"brightness"
-).value = 120;
+applyDreamy();
 
 }
+
+/* BLACK WHITE */
 
 if(prompt.includes("black")){
 
-document.getElementById(
-"grayscale"
-).value = 100;
+image.style.filter =
+"grayscale(100%) contrast(120%)";
 
 }
+
+/* ANIME */
+
+if(prompt.includes("anime")){
+
+image.style.filter =
+"saturate(180%) contrast(140%) brightness(110%)";
+
+}
+
+/* NEON */
+
+if(prompt.includes("neon")){
+
+applyNeon();
+
+}
+
+/* SHIMLA */
 
 if(prompt.includes("shimla")){
 
-document.getElementById(
-"backgroundSelect"
-).selectedIndex = 1;
+document.getElementById("backgroundSelect")
+.selectedIndex = 1;
 
 changeBackground();
 
 }
+
+/* BEACH */
 
 if(prompt.includes("beach")){
 
-document.getElementById(
-"backgroundSelect"
-).selectedIndex = 2;
+document.getElementById("backgroundSelect")
+.selectedIndex = 2;
 
 changeBackground();
 
 }
 
-applyFilters();
+/* SNOW */
+
+if(prompt.includes("snow")){
+
+document.getElementById("backgroundSelect")
+.selectedIndex = 5;
+
+changeBackground();
 
 }
+
+alert("🤖 AI Edit Applied Successfully!");
+
+}
+
+/* DOWNLOAD */
 
 function downloadImage(){
 
