@@ -1,28 +1,605 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Website Builder</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Web of Webs - AI Website Builder</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:#0f172a;
+overflow:hidden;
+color:white;
+}
+
+/* MAIN LAYOUT */
+
+.container{
+display:flex;
+height:100vh;
+width:100%;
+}
+
+/* LEFT PANEL */
+
+.sidebar{
+width:360px;
+background:#111827;
+padding:25px;
+overflow-y:auto;
+border-right:1px solid rgba(255,255,255,0.08);
+}
+
+.logo{
+font-size:30px;
+font-weight:700;
+margin-bottom:25px;
+color:#60a5fa;
+}
+
+.section-title{
+font-size:15px;
+margin-top:25px;
+margin-bottom:12px;
+font-weight:600;
+color:#9ca3af;
+}
+
+.input{
+width:100%;
+padding:14px;
+border:none;
+outline:none;
+border-radius:12px;
+margin-bottom:15px;
+background:#1f2937;
+color:white;
+font-size:15px;
+}
+
+.textarea{
+width:100%;
+height:100px;
+padding:14px;
+border:none;
+outline:none;
+border-radius:12px;
+background:#1f2937;
+color:white;
+font-size:15px;
+resize:none;
+}
+
+.button{
+width:100%;
+padding:14px;
+border:none;
+border-radius:14px;
+background:linear-gradient(45deg,#2563eb,#3b82f6);
+color:white;
+font-size:16px;
+font-weight:600;
+cursor:pointer;
+margin-top:15px;
+transition:0.3s;
+}
+
+.button:hover{
+transform:scale(1.03);
+}
+
+/* TEMPLATE BUTTONS */
+
+.template-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+margin-top:10px;
+}
+
+.template{
+padding:12px;
+border-radius:14px;
+background:#1f2937;
+text-align:center;
+cursor:pointer;
+transition:0.3s;
+font-size:14px;
+}
+
+.template:hover{
+background:#2563eb;
+transform:translateY(-3px);
+}
+
+/* AI BOX */
+
+.ai-box{
+background:#1e293b;
+padding:15px;
+border-radius:16px;
+margin-top:20px;
+}
+
+.ai-title{
+font-size:18px;
+font-weight:600;
+margin-bottom:10px;
+}
+
+/* ERROR PANEL */
+
+.error-box{
+margin-top:20px;
+background:#7f1d1d;
+padding:15px;
+border-radius:16px;
+}
+
+.error-title{
+font-weight:700;
+margin-bottom:10px;
+}
+
+.error-item{
+font-size:14px;
+margin-bottom:8px;
+}
+
+/* PREVIEW AREA */
+
+.preview{
+flex:1;
+overflow-y:auto;
+background:#f8fafc;
+position:relative;
+}
+
+/* WEBSITE PREVIEW */
+
+.website{
+min-height:100vh;
+transition:0.4s;
+}
+
+/* HERO SECTION */
+
+.hero{
+height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+padding:20px;
+background-size:cover;
+background-position:center;
+position:relative;
+overflow:hidden;
+}
+
+.hero::before{
+content:'';
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.55);
+}
+
+.hero-content{
+position:relative;
+z-index:2;
+max-width:800px;
+}
+
+.hero h1{
+font-size:70px;
+margin-bottom:20px;
+font-weight:700;
+}
+
+.hero p{
+font-size:22px;
+line-height:1.6;
+margin-bottom:30px;
+}
+
+.hero button{
+padding:16px 35px;
+border:none;
+border-radius:50px;
+background:#3b82f6;
+color:white;
+font-size:18px;
+cursor:pointer;
+font-weight:600;
+transition:0.3s;
+}
+
+.hero button:hover{
+transform:scale(1.06);
+}
+
+/* FEATURE SECTION */
+
+.features{
+padding:90px 40px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:30px;
+background:white;
+}
+
+.card{
+background:#ffffff;
+padding:35px;
+border-radius:24px;
+box-shadow:0 10px 30px rgba(0,0,0,0.08);
+transition:0.3s;
+}
+
+.card:hover{
+transform:translateY(-8px);
+}
+
+.card h3{
+font-size:24px;
+margin-bottom:15px;
+color:#111827;
+}
+
+.card p{
+color:#6b7280;
+line-height:1.6;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:1000px){
+
+.container{
+flex-direction:column;
+}
+
+.sidebar{
+width:100%;
+height:45vh;
+}
+
+.preview{
+height:55vh;
+}
+
+.hero h1{
+font-size:42px;
+}
+
+.hero p{
+font-size:18px;
+}
+
+}
+
+</style>
 </head>
+
 <body>
 
-<div class="builder-container">
+<div class="container">
 
-  <h1>Website Builder</h1>
+<!-- LEFT PANEL -->
 
-  <div class="builder-grid">
+<div class="sidebar">
 
-    <textarea placeholder="Write HTML Code"></textarea>
+<div class="logo">Web of Webs</div>
 
-    <textarea placeholder="Write CSS Code"></textarea>
+<div class="section-title">Website Title</div>
+<input class="input" id="titleInput" placeholder="Enter website title">
 
-    <textarea placeholder="Write JavaScript Code"></textarea>
+<div class="section-title">Website Description</div>
+<textarea class="textarea" id="descInput" placeholder="Describe your website"></textarea>
 
-  </div>
+<div class="section-title">Button Text</div>
+<input class="input" id="buttonInput" placeholder="Button text">
 
-  <button>Run Website</button>
+<div class="section-title">Background Image URL</div>
+<input class="input" id="bgInput" placeholder="Paste image URL">
+
+<div class="section-title">Templates</div>
+
+<div class="template-grid">
+
+<div class="template" onclick="setTemplate('business')">
+💼 Business
+</div>
+
+<div class="template" onclick="setTemplate('gaming')">
+🎮 Gaming
+</div>
+
+<div class="template" onclick="setTemplate('portfolio')">
+🎨 Portfolio
+</div>
+
+<div class="template" onclick="setTemplate('restaurant')">
+🍔 Restaurant
+</div>
+
+<div class="template" onclick="setTemplate('startup')">
+🚀 Startup
+</div>
+
+<div class="template" onclick="setTemplate('agency')">
+🌐 Agency
+</div>
 
 </div>
+
+<div class="ai-box">
+
+<div class="ai-title">🤖 AI Assistant</div>
+
+<textarea class="textarea" id="aiPrompt" placeholder="Example: Create a futuristic AI startup website"></textarea>
+
+<button class="button" onclick="generateAIWebsite()">
+Generate with AI
+</button>
+
+</div>
+
+<div class="error-box">
+
+<div class="error-title">
+⚠ AI Error Detector
+</div>
+
+<div class="error-item">
+• Check heading visibility
+</div>
+
+<div class="error-item">
+• Check mobile responsiveness
+</div>
+
+<div class="error-item">
+• Check button contrast
+</div>
+
+<div class="error-item">
+• Suggest CTA improvements
+</div>
+
+<div class="error-item">
+• Detect weak content
+</div>
+
+</div>
+
+<button class="button" onclick="updatePreview()">
+Update Website
+</button>
+
+</div>
+
+<!-- RIGHT PREVIEW -->
+
+<div class="preview">
+
+<div class="website">
+
+<section class="hero" id="heroSection"
+style="background-image:url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1600&auto=format&fit=crop');">
+
+<div class="hero-content">
+
+<h1 id="previewTitle">
+Create Your Dream Website
+</h1>
+
+<p id="previewDesc">
+Build futuristic websites with AI and modern design.
+</p>
+
+<button id="previewButton">
+Get Started
+</button>
+
+</div>
+
+</section>
+
+<section class="features">
+
+<div class="card">
+<h3>⚡ Fast Builder</h3>
+<p>Create websites instantly using smart AI tools and modern templates.</p>
+</div>
+
+<div class="card">
+<h3>🎨 Premium Design</h3>
+<p>Generate aesthetic and modern UI with advanced customization.</p>
+</div>
+
+<div class="card">
+<h3>🤖 AI Assistant</h3>
+<p>AI helps generate layouts, headings, colors and fixes errors.</p>
+</div>
+
+<div class="card">
+<h3>📱 Responsive</h3>
+<p>Your website automatically works perfectly on mobile and desktop.</p>
+</div>
+
+</section>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+function updatePreview(){
+
+const title =
+document.getElementById('titleInput').value;
+
+const desc =
+document.getElementById('descInput').value;
+
+const button =
+document.getElementById('buttonInput').value;
+
+const bg =
+document.getElementById('bgInput').value;
+
+if(title){
+document.getElementById('previewTitle').innerText = title;
+}
+
+if(desc){
+document.getElementById('previewDesc').innerText = desc;
+}
+
+if(button){
+document.getElementById('previewButton').innerText = button;
+}
+
+if(bg){
+document.getElementById('heroSection').style.backgroundImage =
+`url('${bg}')`;
+}
+
+}
+
+/* TEMPLATES */
+
+function setTemplate(type){
+
+if(type === 'business'){
+
+document.getElementById('previewTitle').innerText =
+'Grow Your Business';
+
+document.getElementById('previewDesc').innerText =
+'Professional business websites for modern companies.';
+
+}
+
+if(type === 'gaming'){
+
+document.getElementById('previewTitle').innerText =
+'Enter The Gaming Universe';
+
+document.getElementById('previewDesc').innerText =
+'Create immersive gaming experiences and communities.';
+
+}
+
+if(type === 'portfolio'){
+
+document.getElementById('previewTitle').innerText =
+'Show Your Creative Work';
+
+document.getElementById('previewDesc').innerText =
+'Build modern portfolios for designers and developers.';
+
+}
+
+if(type === 'restaurant'){
+
+document.getElementById('previewTitle').innerText =
+'Delicious Food Experience';
+
+document.getElementById('previewDesc').innerText =
+'Modern restaurant websites with menus and booking systems.';
+
+}
+
+if(type === 'startup'){
+
+document.getElementById('previewTitle').innerText =
+'Build The Future';
+
+document.getElementById('previewDesc').innerText =
+'Launch AI startups with premium landing pages.';
+
+}
+
+if(type === 'agency'){
+
+document.getElementById('previewTitle').innerText =
+'Creative Digital Agency';
+
+document.getElementById('previewDesc').innerText =
+'High-converting agency websites with animations and branding.';
+
+}
+
+}
+
+/* AI GENERATOR */
+
+function generateAIWebsite(){
+
+const prompt =
+document.getElementById('aiPrompt').value.toLowerCase();
+
+if(prompt.includes('gaming')){
+
+setTemplate('gaming');
+
+}
+
+else if(prompt.includes('portfolio')){
+
+setTemplate('portfolio');
+
+}
+
+else if(prompt.includes('restaurant')){
+
+setTemplate('restaurant');
+
+}
+
+else if(prompt.includes('business')){
+
+setTemplate('business');
+
+}
+
+else if(prompt.includes('startup')){
+
+setTemplate('startup');
+
+}
+
+else{
+
+setTemplate('agency');
+
+}
+
+alert("🤖 AI Website Generated Successfully!");
+
+}
+
+</script>
 
 </body>
 </html>
